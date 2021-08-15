@@ -1,4 +1,7 @@
 security:
+    encoders:
+        App\Entity\User:
+            algorithm: bcrypt
     # https://symfony.com/doc/current/security/experimental_authenticators.html
     enable_authenticator_manager: true
     password_hashers:
@@ -12,16 +15,24 @@ security:
             entity:
                 class: App\Entity\User
                 property: email
+        in_database:
+            entity:
+                class: App\Entity\User
+                property: email
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
             lazy: true
-            provider: app_user_provider
-            custom_authenticator: App\Security\LoginFormAuthenticator
+            provider: in_database
+            guard:
+                authenticators:
+                    - App\Security\LoginFormAuthenticator
+            #custom_authenticator: App\Security\LoginFormAuthenticator
             logout:
-                path: app_logout
+                path: app_logout        
                 # where to redirect after logout
                 # target: app_any_route
 
