@@ -30,7 +30,7 @@ class AppFixtures extends Fixture
             // Créer entre 4 et 6 figures
             for($j=1; $j<=mt_rand(4,6); $j++){
                 $post = new Post;
-                $description = '<p>'.join($faker->paragraphs(5), '</p><p>') . '</p>';
+                $description = '<p>'.join($faker->paragraphs(5)) . '</p>';
                 $post->setName($faker->word)
                 ->setDescription($description)
                 ->setPhoto($faker->imageUrl())
@@ -43,7 +43,7 @@ class AppFixtures extends Fixture
                 // Créer entre 4 et 10 figures
                 for($k=1; $k<=mt_rand(4,10); $k++){
                     $comment = new Comment;
-                    $content = '<p>'.join($faker->paragraphs(5), '</p><p>') . '</p>';
+                    $content = '<p>'.join($faker->paragraphs(5)) . '</p>';
 
                     $now = new \DateTime();
                     $interval = $now->diff($post->getDate());
