@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomeController!{% endblock %}
+
+{% block body %}
+
+<section class="article">
+
+    {% for post in posts %}
+        <article>
+            <h2>{{ post.name }}</h2>
+            <div class="metadata">
+                Post crée le {{ post.date | date('d/m/y') }} à {{ post.date | date('H:i') }}
+            </div>
+            <div class="content">
+                <img src="{{ post.photo }}" alt="">
+                {{ post.description }}
+            </div>
+        </article>
+    {% endfor %}
+</section>
+{% endblock %}
