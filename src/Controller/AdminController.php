@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Post;
 use App\Form\PostType;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -23,7 +22,7 @@ class AdminController extends AbstractController
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
-            echo"testtt";
+            
             $manager->persist($post);
             $manager->flush();
             
