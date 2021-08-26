@@ -30,12 +30,12 @@ class AppFixtures extends Fixture
             // Créer entre 4 et 6 figures
             for($j=1; $j<=mt_rand(4,6); $j++){
                 $post = new Post;
-                $description = '<p>'.join($faker->paragraphs(5)) . '</p>';
+                $description = join($faker->paragraphs(5));
                 $post->setName($faker->word)
                 ->setDescription($description)
                 ->setPhoto($faker->imageUrl())
                 ->setVideo($faker->url('https://www.youtube.com/watch?v=SQyTWk7OxSI'))
-                ->setDate(new \DateTime())
+                ->setDate($faker->dateTimeBetween('2021-01-01', 'now'))
                 ->setGroup($group);
 
                 $manager->persist($post);
@@ -43,15 +43,10 @@ class AppFixtures extends Fixture
                 // Créer entre 4 et 10 figures
                 for($k=1; $k<=mt_rand(4,10); $k++){
                     $comment = new Comment;
-                    $content = '<p>'.join($faker->paragraphs(5)) . '</p>';
-
-                    $now = new \DateTime();
-                    $interval = $now->diff($post->getDate());
-                    $days = $interval->days;
-                    $min = '-' .$days. 'days';
+                    $content = join($faker->paragraphs(5));
 
                     $comment->setName($faker->name)
-                    ->setDate($faker->dateTimeBetween($min))
+                    ->setDate($faker->dateTimeBetween('2021-01-01', 'now'))
                     ->setContent($faker->sentence(20, true))
                     ->setPost($post);
 
