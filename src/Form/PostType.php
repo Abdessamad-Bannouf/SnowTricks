@@ -44,7 +44,7 @@ class PostType extends AbstractType
                 'class' => Group::class,
                 'choice_label' => 'name',
                 'multiple' => false
-            ])
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
