@@ -50,7 +50,7 @@ class Post
     private $comments;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Group::class, inversedBy="Post")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Group", inversedBy="posts")
      */
     private $group;
 
@@ -124,6 +124,11 @@ class Post
         return $this;
     }
 
+    public function getGroup(): ?Group
+    {
+        return $this->group;
+    }
+
     public function setGroup(?Group $group): self
     {
         $this->group = $group;
@@ -134,7 +139,7 @@ class Post
     /**
      * @return Collection|Comment[]
      */
-    public function getGroup(): Collection
+    public function getComments(): Collection
     {
         return $this->comments;
     }
@@ -159,5 +164,12 @@ class Post
         }
 
         return $this;
+    }
+
+    public function __toString(){
+        // to show the name of the Category in the select
+        return $this->name;
+        // to show the id of the Category in the select
+        // return $this->id;
     }
 }
