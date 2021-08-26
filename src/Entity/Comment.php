@@ -23,11 +23,6 @@ class Comment
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=30)
-     */
-    private $photo;
-
-    /**
      * @ORM\Column(type="datetime")
      */
     private $date;
@@ -36,6 +31,11 @@ class Comment
      * @ORM\Column(type="string", length=255)
      */
     private $content;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Post::class, inversedBy="comments")
+     */
+    private $post;
 
     public function getId(): ?int
     {
@@ -50,18 +50,6 @@ class Comment
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getPhoto(): ?string
-    {
-        return $this->photo;
-    }
-
-    public function setPhoto(string $photo): self
-    {
-        $this->photo = $photo;
 
         return $this;
     }
@@ -86,6 +74,18 @@ class Comment
     public function setContent(string $content): self
     {
         $this->content = $content;
+
+        return $this;
+    }
+
+    public function getPost(): ?Post
+    {
+        return $this->post;
+    }
+
+    public function setPost(?Post $post): self
+    {
+        $this->post = $post;
 
         return $this;
     }
