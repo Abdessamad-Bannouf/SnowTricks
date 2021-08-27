@@ -32,11 +32,6 @@ class Post
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $photo;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     private $video;
 
     /**
@@ -54,9 +49,15 @@ class Post
      */
     private $group;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Photo::class, mappedBy="post", orphanRemoval=true, cascade={"persist"})
+     */
+    private $photos;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->photos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -84,18 +85,6 @@ class Post
     public function setDescription(string $description): self
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getPhoto(): ?string
-    {
-        return $this->photo;
-    }
-
-    public function setPhoto(string $photo): self
-    {
-        $this->photo = $photo;
 
         return $this;
     }
@@ -171,5 +160,35 @@ class Post
         return $this->name;
         // to show the id of the Category in the select
         // return $this->id;
+    }
+
+    /**
+     * @return Collection|Photo[]
+     */
+    public function getPhotos(): Collection
+    {
+        return $this->photos;
+    }
+
+    public function addPhoto(Photo $photo): self
+    {
+        if (!$this->photos->contains($photo)) {
+            $this->photos[] = $photo;
+            $photo->setPost($this);
+        }
+
+        return $this;
+    }
+
+    public function removePhoto(Photo $photo): self
+    {
+        if ($this->photos->removeElement($photo)) {
+            // set the owning side to null (unless already changed)
+            if ($photo->getPost() === $this) {
+                $photo->setPost(null);
+            }
+        }
+
+        return $this;
     }
 }
