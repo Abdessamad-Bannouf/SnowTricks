@@ -32,6 +32,11 @@ class Post
     /**
      * @ORM\Column(type="string", length=255)
      */
+    private $photo;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
     private $video;
 
     /**
@@ -85,6 +90,18 @@ class Post
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getPhoto(): ?string
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto(string $photo): self
+    {
+        $this->photo = $photo;
 
         return $this;
     }
