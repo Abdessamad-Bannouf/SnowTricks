@@ -29,13 +29,13 @@ class PostType extends AbstractType
                 ]
             ])
             ->add('photo', FileType::class, [
-                'label' => false,
+                'label' => 'Mettre la photo principale',
                 'multiple' => false,
                 'mapped' => false, 
                 'required' => false
             ])
             ->add('photos', FileType::class, [
-                'label' => false,
+                'label' => 'Mettez les photos',
                 'multiple' => true,
                 'mapped' => false, 
                 'required' => false
