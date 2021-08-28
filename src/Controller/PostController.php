@@ -55,8 +55,28 @@ class PostController extends AbstractController
                 $post->addPhoto($photo);
             }
 
+            // On récupère l'image principale qui va servir pour la page pour afficher la liste
+            $mainImage = $form->get('photo')->getData();
+            $fichier = md5(uniqid()) . '.' . $mainImage->guessExtension();
+
+            // On copie le fichier dans le dossier upload
+            $mainImage->move(
+                $this->getParameter('images_directory'),
+                $fichier);
+            $mainImage = $post->setPhoto($fichier);
+
+            // On instancie la date
+            $date = new \DateTime();
+            $date = $post->setDate($date);
+
             $entityManager = $this->getDoctrine()->getManager();
+
+            // On stocke l'image principale dans la base de données (son nom)
+            $entityManager->persist($mainImage);
+            // On stocke la date dans la base de données
+            $entityManager->persist($date);
             $entityManager->persist($post);
+            
             $entityManager->flush();
 
             return $this->redirectToRoute('post_index', [], Response::HTTP_SEE_OTHER);
