@@ -28,6 +28,12 @@ class PostType extends AbstractType
                     'class' => 'form-control'
                 ]
             ])
+            ->add('photo', FileType::class, [
+                'label' => false,
+                'multiple' => false,
+                'mapped' => false, 
+                'required' => false
+            ])
             ->add('photos', FileType::class, [
                 'label' => false,
                 'multiple' => true,
