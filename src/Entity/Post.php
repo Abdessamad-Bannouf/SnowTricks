@@ -29,10 +29,7 @@ class Post
      */
     private $description;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $photo;
+ 
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -58,6 +55,11 @@ class Post
      * @ORM\OneToMany(targetEntity=Photo::class, mappedBy="post", orphanRemoval=true, cascade={"persist"})
      */
     private $photos;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $photo;
 
     public function __construct()
     {
