@@ -40,11 +40,11 @@ class PostType extends AbstractType
                 'mapped' => false, 
                 'required' => false
             ])
-            ->add('video', TextType::class, [
-                'attr' => [
-                    'placeholder' => "Vidéo de l'article",
-                    'class' => 'form-control'
-                ]
+            ->add('videos', FileType::class, [
+                'label' => 'Mettez les vidéos',
+                'multiple' => true,
+                'mapped' => false, 
+                'required' => false
             ])
             ->add('group', EntityType::class, [
                 'class' => Group::class,
