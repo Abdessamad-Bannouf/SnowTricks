@@ -29,12 +29,15 @@ class Post
      */
     private $description;
 
- 
-
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $video;
+    private $photo;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="post", orphanRemoval=true, cascade={"persist"})
+     */
+    private $videos;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -56,15 +59,11 @@ class Post
      */
     private $photos;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $photo;
-
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->photos = new ArrayCollection();
+        $this->videos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -104,18 +103,6 @@ class Post
     public function setPhoto(string $photo): self
     {
         $this->photo = $photo;
-
-        return $this;
-    }
-
-    public function getVideo(): ?string
-    {
-        return $this->video;
-    }
-
-    public function setVideo(string $video): self
-    {
-        $this->video = $video;
 
         return $this;
     }
@@ -201,10 +188,41 @@ class Post
 
     public function removePhoto(Photo $photo): self
     {
+        dump($this->photos->contains($photo));die();
         if ($this->photos->removeElement($photo)) {
             // set the owning side to null (unless already changed)
             if ($photo->getPost() === $this) {
                 $photo->setPost(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Video[]
+     */
+    public function getVideos(): Collection
+    {
+        return $this->videos;
+    }
+
+    public function addVideo(Video $video): self
+    {
+        if (!$this->videos->contains($video)) {
+            $this->videos[] = $video;
+            $video->setPost($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVideo(Video $video): self
+    {
+        if ($this->videos->removeElement($video)) {
+            // set the owning side to null (unless already changed)
+            if ($video->getPost() === $this) {
+                $video->setPost(null);
             }
         }
 
