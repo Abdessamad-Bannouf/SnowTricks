@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Photo;
 use App\Entity\Post;
+use App\Entity\Video;
 use App\Form\PostType;
 use App\Repository\PostRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -38,6 +39,7 @@ class PostController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // On récupère les images transmises
             $images = $form->get('photos')->getData();
+            $videos = $form->get('videos')->getData();
 
             // On boucle sur les images
             foreach($images as $image){
@@ -53,6 +55,22 @@ class PostController extends AbstractController
                 $photo = new Photo;
                 $photo->setName($fichier);
                 $post->addPhoto($photo);
+            }
+
+            // On boucle sur les images
+            foreach($videos as $video){
+                // On génère un nouveau nom de fichier
+                $fichier = md5(uniqid()) . '.' . $video->guessExtension();
+
+                // On copie le fichier dans le dossier upload
+                $video->move(
+                    $this->getParameter('videos_directory'),
+                    $fichier);
+
+                // On stocke la vidéo dans la base de données (son nom)
+                $videos = new Video;
+                $videos->setName($fichier);
+                $post->addVideo($videos);
             }
 
             // On récupère l'image principale qui va servir pour la page pour afficher la liste
