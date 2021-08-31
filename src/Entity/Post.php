@@ -35,11 +35,6 @@ class Post
     private $photo;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $video;
-
-    /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $create_at;
@@ -100,14 +95,14 @@ class Post
         return $this;
     }
 
-    public function getVideo(): ?string
+    public function getVideos(): ?string
     {
-        return $this->video;
+        return $this->videos;
     }
 
-    public function setVideo(string $video): self
+    public function setVideos(string $videos): self
     {
-        $this->video = $video;
+        $this->videos = $videos;
 
         return $this;
     }
