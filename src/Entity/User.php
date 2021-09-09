@@ -47,7 +47,7 @@ class User implements UserInterface
     private $confirm_password;
 
     /**
-     * @ORM\Column(type="string", length=30)
+     * @ORM\Column(type="string", length=30, nullable=true)
      */
     private $photo;
 
