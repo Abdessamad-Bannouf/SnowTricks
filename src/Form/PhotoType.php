@@ -14,9 +14,9 @@ class PhotoType extends AbstractType
     {
         $builder
             ->add('name', FileType::class, [
-                'label' => 'Mettre la photo principale',
+                'label' => 'Mettre une photo',
                 'multiple' => false,
-                'mapped' => false, 
+                'mapped' => true, 
                 'required' => false
             ])
             ->add('post')
