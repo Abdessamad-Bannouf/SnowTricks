@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Group;
+use App\Entity\Photo;
 use App\Entity\Post;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -35,10 +36,16 @@ class PostType extends AbstractType
                 'required' => false
             ])
             ->add('photos', CollectionType::class, [
-                'entry_type' => PhotoType::class
+                'entry_type' => PhotoType::class,
+                'entry_options' => ['label' => false],
+                'allow_add' => true,
+                'prototype' => true,
             ])
             ->add('videos', CollectionType::class, [
-                'entry_type' => VideoType::class
+                'entry_type' => VideoType::class,
+                'entry_options' => ['label' => false],
+                'allow_add' => true,
+
             ])
             ->add('group', EntityType::class, [
                 'class' => Group::class,
