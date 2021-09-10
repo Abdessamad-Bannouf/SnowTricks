@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * @Route("/post")
@@ -39,10 +40,14 @@ class PostController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // On récupère les images transmises
             $images = $form->get('photos')->getData();
+
+            // On récupère les vidéos transmises
             $videos = $form->get('videos')->getData();
 
             // On boucle sur les images
             foreach($images as $image){
+                $image = new File($image->getName());
+                
                 // On génère un nouveau nom de fichier
                 $fichier = md5(uniqid()) . '.' . $image->guessExtension();
 
@@ -58,19 +63,11 @@ class PostController extends AbstractController
             }
 
             // On boucle sur les images
-            foreach($videos as $video){
-                // On génère un nouveau nom de fichier
-                $fichier = md5(uniqid()) . '.' . $video->guessExtension();
-
-                // On copie le fichier dans le dossier upload
-                $video->move(
-                    $this->getParameter('videos_directory'),
-                    $fichier);
-
+            foreach($videos as $link){
                 // On stocke la vidéo dans la base de données (son nom)
-                $videos = new Video;
-                $videos->setName($fichier);
-                $post->addVideo($videos);
+                $video = new Video;
+                $video->setName($link->getName());
+                $post->addVideo($video);
             }
 
             // On récupère l'image principale qui va servir pour la page pour afficher la liste
@@ -100,9 +97,9 @@ class PostController extends AbstractController
             return $this->redirectToRoute('post_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('post/new.html.twig', [
+        return $this->render('post/new.html.twig', [
             'post' => $post,
-            'form' => $form,
+            'form' => $form->createView()
         ]);
     }
 
