@@ -34,7 +34,6 @@ class AppFixtures extends Fixture
                 $post->setName($faker->word)
                 ->setDescription($description)
                 ->setPhoto($faker->imageUrl())
-                ->setVideo($faker->url('https://www.youtube.com/watch?v=SQyTWk7OxSI'))
                 ->setDate($faker->dateTimeBetween('2021-01-01', 'now'))
                 ->setGroup($group);
 
