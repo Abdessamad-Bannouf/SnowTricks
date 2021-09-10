@@ -14,7 +14,8 @@ class VideoType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, ['attr' => [
-                'placeholder' => "Titre de l'article"
+                'placeholder' => "Lien vidéo",
+                'mapped' => true
             ]])
             ->add('post')
         ;
