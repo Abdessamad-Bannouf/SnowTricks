@@ -24,12 +24,22 @@
                 <td>{{ post.photo }}</td>
             </tr>
             <tr>
+                <th>Photos</th>
+                <td>{% for photo in post.photos %}
+                        {{ photo.name }}
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
                 <th>Video</th>
-                <td>{{ post.video }}</td>
+                <td>{% for video in post.videos %}
+                        {{ video.name }}
+                    {% endfor %}
+                </td>
             </tr>
             <tr>
                 <th>Create_at</th>
-                <td>{{ post.createAt ? post.createAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ post.date ? post.date|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
         </tbody>
     </table>
