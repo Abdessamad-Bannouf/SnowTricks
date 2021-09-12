@@ -35,7 +35,6 @@ class Comment
 
     /**
      * @ORM\ManyToOne(targetEntity=Post::class, inversedBy="comments")
-     * @JoinColumn(onDelete="CASCADE")
      */
     private $post;
 
