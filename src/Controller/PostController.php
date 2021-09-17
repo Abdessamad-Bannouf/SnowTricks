@@ -34,6 +34,8 @@ class PostController extends AbstractController
     public function new(Request $request): Response
     {
         $post = new Post();
+
+        $entityManager = $this->getDoctrine()->getManager();
         
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
@@ -60,7 +62,12 @@ class PostController extends AbstractController
                 $photo = new Photo;
                 $photo->setName($fichier);
                 $post->addPhoto($photo);
+                
+                $entityManager->persist($photo);  
             }
+
+
+
 
             // On boucle sur les images
             foreach($videos as $link){
@@ -68,7 +75,12 @@ class PostController extends AbstractController
                 $video = new Video;
                 $video->setName($link->getName());
                 $post->addVideo($video);
+
+                $entityManager->persist($video);
             }
+
+
+
 
             // On récupère l'image principale qui va servir pour la page pour afficher la liste
             $mainImage = $form->get('photo')->getData();
@@ -84,12 +96,10 @@ class PostController extends AbstractController
             $date = new \DateTime();
             $date = $post->setDate($date);
 
-            $entityManager = $this->getDoctrine()->getManager();
-
             // On stocke l'image principale dans la base de données (son nom)
-            $entityManager->persist($mainImage);
+            //$entityManager->persist($mainImage);
             // On stocke la date dans la base de données
-            $entityManager->persist($date);
+            //$entityManager->persist($date);
             $entityManager->persist($post);
             
             $entityManager->flush();
@@ -129,7 +139,7 @@ class PostController extends AbstractController
 
         return $this->renderForm('post/edit.html.twig', [
             'post' => $post,
-            'form' => $form,
+            //'form' => $form,
         ]);
     }
 
