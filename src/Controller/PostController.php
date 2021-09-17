@@ -52,7 +52,7 @@ class PostController extends AbstractController
                 
                 // On génère un nouveau nom de fichier
                 $fichier = md5(uniqid()) . '.' . $image->guessExtension();
-
+dump($fichier);
                 // On copie le fichier dans le dossier upload
                 $image->move(
                     $this->getParameter('images_directory'),
@@ -62,10 +62,8 @@ class PostController extends AbstractController
                 $photo = new Photo;
                 $photo->setName($fichier);
                 $post->addPhoto($photo);
-                
-                $entityManager->persist($photo);  
+                $entityManager->persist($photo);
             }
-
 
 
 
@@ -75,7 +73,6 @@ class PostController extends AbstractController
                 $video = new Video;
                 $video->setName($link->getName());
                 $post->addVideo($video);
-
                 $entityManager->persist($video);
             }
 
@@ -137,9 +134,9 @@ class PostController extends AbstractController
             return $this->redirectToRoute('post_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('post/edit.html.twig', [
+        return $this->render('post/edit.html.twig', [
             'post' => $post,
-            //'form' => $form,
+            'form' => $form->createView()
         ]);
     }
 
