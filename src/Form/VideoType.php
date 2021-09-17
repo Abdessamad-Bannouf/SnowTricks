@@ -16,12 +16,10 @@ class VideoType extends AbstractType
             ->add('name', TextType::class, ['attr' => [
                 'placeholder' => "Lien vidéo",
                 'mapped' => true
-            ]])
-            ->add('post')
-        ;
+            ]]);
     }
-
-    public function configureOptions(OptionsResolver $resolver)
+    
+  public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => Video::class,
