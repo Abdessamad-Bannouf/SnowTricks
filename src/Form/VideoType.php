@@ -17,7 +17,6 @@ class VideoType extends AbstractType
                 'placeholder' => "Lien vidéo",
                 'mapped' => true
             ]])
-            ->add('post')
         ;
     }
 
