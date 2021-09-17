@@ -19,7 +19,6 @@ class PhotoType extends AbstractType
                 'mapped' => true, 
                 'required' => false
             ])
-            ->add('post')
         ;
     }
 
