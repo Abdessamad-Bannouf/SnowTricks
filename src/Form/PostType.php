@@ -40,14 +40,16 @@ class PostType extends AbstractType
                 'entry_options' => ['label' => false],
                 'mapped' => false, 
                 'allow_add' => true,
+                'allow_delete' => true,
                 'by_reference' => false,
-                'prototype' => true
+                'prototype' => true,
             ])
             ->add('videos', CollectionType::class, [
                 'entry_type' => VideoType::class,
                 'entry_options' => ['label' => false],
-                'mapped' => false, 
+                'mapped' => true, 
                 'allow_add' => true,
+                'allow_delete' => true,
                 'by_reference' => false
             ])
             ->add('group', EntityType::class, [
