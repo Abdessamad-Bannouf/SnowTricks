@@ -52,7 +52,7 @@ class PostController extends AbstractController
                 
                 // On génère un nouveau nom de fichier
                 $fichier = md5(uniqid()) . '.' . $image->guessExtension();
-dump($fichier);
+
                 // On copie le fichier dans le dossier upload
                 $image->move(
                     $this->getParameter('images_directory'),
@@ -62,7 +62,6 @@ dump($fichier);
                 $photo = new Photo;
                 $photo->setName($fichier);
                 $post->addPhoto($photo);
-                $entityManager->persist($photo);
             }
 
 
@@ -70,13 +69,10 @@ dump($fichier);
             // On boucle sur les images
             foreach($videos as $link){
                 // On stocke la vidéo dans la base de données (son nom)
-                $video = new Video;
-                $video->setName($link->getName());
-                $post->addVideo($video);
-                $entityManager->persist($video);
+                //$video = new Video;
+                $link->setName($link->getName());
+                $post->addVideo($link);
             }
-
-
 
 
             // On récupère l'image principale qui va servir pour la page pour afficher la liste
