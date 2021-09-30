@@ -160,7 +160,6 @@ class Post
 
     public function removePhoto(Photo $photo): self
     {
-        dump($this->photos->contains($photo));die();
         if ($this->photos->removeElement($photo)) {
             // set the owning side to null (unless already changed)
             if ($photo->getPost() === $this) {
