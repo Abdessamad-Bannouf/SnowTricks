@@ -65,9 +65,9 @@ class PostController extends AbstractController
             // On boucle sur les images
             foreach($videos as $link){
                 // On stocke la vidéo dans la base de données (son nom)
-                $video = new Video;
-                $video->setName($link->getName());
-                $post->addVideo($video);
+                //$video = new Video;
+                $link->setName($link->getName());
+                $post->addVideo($link);
             }
 
             // On récupère l'image principale qui va servir pour la page pour afficher la liste
