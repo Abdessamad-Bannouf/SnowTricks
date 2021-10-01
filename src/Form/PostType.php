@@ -47,10 +47,10 @@ class PostType extends AbstractType
             ->add('videos', CollectionType::class, [
                 'entry_type' => VideoType::class,
                 'entry_options' => ['label' => false],
-                'mapped' => true, 
+                'mapped' => true,
                 'allow_add' => true,
-                'allow_delete' => true,
-                'by_reference' => false
+                'by_reference' => false,
+                'allow_delete' => true
             ])
             ->add('group', EntityType::class, [
                 'class' => Group::class,

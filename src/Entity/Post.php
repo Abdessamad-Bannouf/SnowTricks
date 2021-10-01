@@ -47,6 +47,7 @@ class Post
 
     /**
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="post")
+     * @JoinColumn(onDelete="CASCADE")
      */
 
     private $comments;
@@ -160,7 +161,6 @@ class Post
 
     public function removePhoto(Photo $photo): self
     {
-        dump($this->photos->contains($photo));die();
         if ($this->photos->removeElement($photo)) {
             // set the owning side to null (unless already changed)
             if ($photo->getPost() === $this) {
@@ -197,6 +197,7 @@ class Post
                 $video->setPost(null);
             }
         }
+        return $this;
     }
 
     /**
