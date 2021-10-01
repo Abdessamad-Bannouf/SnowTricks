@@ -38,11 +38,11 @@ class PostType extends AbstractType
             ->add('photos', CollectionType::class, [
                 'entry_type' => PhotoType::class,
                 'entry_options' => ['label' => false],
-                'mapped' => false,
+                'mapped' => false, 
                 'allow_add' => true,
-                'allow_delete' => false,
+                'allow_delete' => true,
                 'by_reference' => false,
-                'prototype' => true
+                'prototype' => true,
             ])
             ->add('videos', CollectionType::class, [
                 'entry_type' => VideoType::class,

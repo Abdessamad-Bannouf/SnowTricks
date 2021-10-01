@@ -34,6 +34,8 @@ class PostController extends AbstractController
     public function new(Request $request): Response
     {
         $post = new Post();
+
+        $entityManager = $this->getDoctrine()->getManager();
         
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
@@ -62,6 +64,8 @@ class PostController extends AbstractController
                 $post->addPhoto($photo);
             }
 
+
+
             // On boucle sur les images
             foreach($videos as $link){
                 // On stocke la vidéo dans la base de données (son nom)
@@ -69,6 +73,7 @@ class PostController extends AbstractController
                 $link->setName($link->getName());
                 $post->addVideo($link);
             }
+
 
             // On récupère l'image principale qui va servir pour la page pour afficher la liste
             $mainImage = $form->get('photo')->getData();
@@ -84,12 +89,10 @@ class PostController extends AbstractController
             $date = new \DateTime();
             $date = $post->setDate($date);
 
-            $entityManager = $this->getDoctrine()->getManager();
-
             // On stocke l'image principale dans la base de données (son nom)
-            $entityManager->persist($mainImage);
+            //$entityManager->persist($mainImage);
             // On stocke la date dans la base de données
-            $entityManager->persist($date);
+            //$entityManager->persist($date);
             $entityManager->persist($post);
             
             $entityManager->flush();

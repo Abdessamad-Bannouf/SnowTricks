@@ -49,6 +49,7 @@ class Post
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="post")
      * @JoinColumn(onDelete="CASCADE")
      */
+
     private $comments;
 
     /**
