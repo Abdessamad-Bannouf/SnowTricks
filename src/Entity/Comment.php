@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=CommentRepository::class)
@@ -39,6 +40,11 @@ class Comment
      * @JoinColumn(onDelete="CASCADE")
      */
     private $user;
+
+    /**
+     * @Assert\EqualTo(propertyPath="postId", message="Votre mot de passe doit être identique")
+     */
+    private $postId;
 
     public function getId(): ?int
     {
@@ -89,6 +95,18 @@ class Comment
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getPostId(): ?string
+    {
+        return $this->postId;
+    }
+
+    public function setPostId(string $postId): self
+    {
+        $this->postId = $postId;
 
         return $this;
     }
