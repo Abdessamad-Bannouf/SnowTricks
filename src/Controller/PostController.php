@@ -122,7 +122,7 @@ class PostController extends AbstractController
 
         return $this->render('post/show.html.twig', [
             'post' => $postRepository->findOneBy(['id' => $id]),
-            'comments' => $commentRepository->findAll(),
+            'comments' => $commentRepository->findBy(['post' => $id]),
             'form' => $form->createView(),
             
         ]);
