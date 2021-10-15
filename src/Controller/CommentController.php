@@ -7,6 +7,7 @@ use App\Entity\Post;
 use App\Entity\User;
 use App\Form\CommentType;
 use App\Repository\CommentRepository;
+use App\Repository\PostRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,24 +31,25 @@ class CommentController extends AbstractController
     /**
      * @Route("/new", name="comment_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, PostRepository $postRepository): Response
     {
-        $post = new Post;
         
         $comment = new Comment();
+
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
+        
         $content = $form->get('content')->getData();
-        //$date = new \DateTime();
-        $test = $request->get('name');
-
-        dump($test); 
-        die();
+        $date = new \DateTime();
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $postId = $form->get('postId')->getData();
+            
+            $post = $postRepository->findBy(['id'=>$postId]);
             $comment->setContent($content);
-            $comment->setPost($post);
+            $comment->setPost($post[0]);
             $comment->setUser($this->getUser());
+            $comment->setDate($date);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($comment);
             $entityManager->flush();
