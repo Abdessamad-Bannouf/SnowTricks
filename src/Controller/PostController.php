@@ -2,16 +2,20 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Photo;
 use App\Entity\Post;
 use App\Entity\Video;
+use App\Form\CommentType;
 use App\Form\PostType;
+use App\Repository\CommentRepository;
 use App\Repository\PostRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 
 /**
  * @Route("/post")
@@ -106,10 +110,21 @@ class PostController extends AbstractController
     /**
      * @Route("/{id}", name="post_show", methods={"GET"})
      */
-    public function show(Post $post): Response
+    public function show(int $id, PostRepository $postRepository, Request $request, CommentRepository $commentRepository): Response
     {
+        $slugger = new AsciiSlugger();
+        $slugger->slug($id);
+
+        $comment = new Comment();
+        
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+
         return $this->render('post/show.html.twig', [
-            'post' => $post,
+            'post' => $postRepository->findOneBy(['id' => $id]),
+            'comments' => $commentRepository->findAll(),
+            'form' => $form->createView(),
+            
         ]);
     }
 
