@@ -48,6 +48,7 @@
     {# Formulaire pour le commentaire #}
     {{ form_start(form, {'action': path('comment_new')}) }}
     {{ form_widget(form.content ) }}
+    {{ form_widget(form.postId, {'value' : post.id} ) }}
     {{ form_end(form) }}
 
     {# Affichage des commentaires #}
