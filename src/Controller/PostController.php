@@ -10,6 +10,7 @@ use App\Form\CommentType;
 use App\Form\PostType;
 use App\Repository\CommentRepository;
 use App\Repository\PostRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,6 +35,7 @@ class PostController extends AbstractController
 
     /**
      * @Route("/new", name="post_new", methods={"GET","POST"})
+     * @IsGranted("ROLE_ADMIN")
      */
     public function new(Request $request): Response
     {
@@ -88,6 +90,10 @@ class PostController extends AbstractController
             $date = new \DateTime();
             $date = $post->setDate($date);
 
+            //On persiste le nom sluggé dans la colonne slug
+            $slugger = new AsciiSlugger('fr', ['fr' => [' ' => '-', 'é' => 'e', 'è' => 'e', 'à' => 'a', 'ô' => 'o']]);
+            $post->setSlug($slugger->slug($post->getName()));
+
             $entityManager = $this->getDoctrine()->getManager();
 
             // On stocke l'image principale dans la base de données (son nom)
@@ -108,28 +114,26 @@ class PostController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="post_show", methods={"GET"})
+     * @Route("/{slug}", name="post_show", methods={"GET"})
      */
-    public function show(int $id, PostRepository $postRepository, Request $request, CommentRepository $commentRepository): Response
+    public function show($slug, Post $post, PostRepository $postRepository, Request $request, CommentRepository $commentRepository): Response
     {
-        $slugger = new AsciiSlugger();
-        $slugger->slug($id);
-
         $comment = new Comment();
         
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
 
         return $this->render('post/show.html.twig', [
-            'post' => $postRepository->findOneBy(['id' => $id]),
-            'comments' => $commentRepository->findBy(['post' => $id]),
+            'post' => $postRepository->findOneBy(['slug' => $slug]),
+            'comments' => $commentRepository->findBy(['post' => $post]),
             'form' => $form->createView(),
             
         ]);
     }
 
     /**
-     * @Route("/{id}/edit", name="post_edit", methods={"GET","POST"})
+     * @Route("/{slug}/edit", name="post_edit", methods={"GET","POST"})
+     * @IsGranted("ROLE_ADMIN")
      */
     public function edit(Request $request, Post $post): Response
     {
@@ -149,12 +153,14 @@ class PostController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="post_delete", methods={"POST"})
+     * @Route("/{slug}", name="post_delete", methods={"POST"})
+     * @IsGranted("ROLE_ADMIN")
      */
     public function delete(Request $request, Post $post): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$post->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$post->getSlug(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
+            
             $entityManager->remove($post);
             $entityManager->flush();
         }
