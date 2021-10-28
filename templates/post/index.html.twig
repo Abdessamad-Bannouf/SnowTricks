@@ -25,8 +25,10 @@
                 <td>{{ post.photo }}</td>
                 <td>{{ post.date | date('d/m/y') }} à {{ post.date | date('H:i') }}</td>
                 <td>
-                    <a href="{{ path('post_show', {'id': post.id}) }}">show</a>
-                    <a href="{{ path('post_edit', {'id': post.id}) }}">edit</a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('post_show', {'slug': post.slug}) }}">show</a>
+                    <a href="{{ path('post_edit', {'slug': post.slug}) }}">edit</a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
