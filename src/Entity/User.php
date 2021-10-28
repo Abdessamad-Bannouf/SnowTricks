@@ -57,6 +57,11 @@ class User implements UserInterface
      */
     private $comments;
 
+    /**
+     * @ORM\Column(type="string", length=30, nullable=true)
+     */
+    private $roles;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -163,8 +168,17 @@ class User implements UserInterface
         
     }
 
+    public function getRole(): ?array
+    {
+        return [$this->roles];
+    }
+
     public function getRoles()
     {
+        $isAdmin = in_array('ROLE_ADMIN', $this->getRole());
+        if($isAdmin){
+            return ['ROLE_ADMIN'];
+        }
         return ['ROLE_USER'];
     }
 }
