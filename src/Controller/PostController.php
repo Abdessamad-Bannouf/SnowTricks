@@ -91,7 +91,7 @@ class PostController extends AbstractController
             $date = $post->setDate($date);
 
             //On persiste le nom sluggé dans la colonne slug
-            $slugger = new AsciiSlugger('fr', ['fr' => [' ' => '-', 'é' => 'e', 'è' => 'e', 'à' => 'a', 'ô' => 'o']]);
+            $slugger = new AsciiSlugger('fr', ['fr' => [' ' => '-', 'à' => 'a', 'â' => 'a', 'é' => 'e', 'è' => 'e', 'ê' => 'e', 'î' => 'i', 'ï' => 'i', 'ô' => 'o', 'û' => 'u']]);
             $post->setSlug($slugger->slug($post->getName()));
 
             $entityManager = $this->getDoctrine()->getManager();
@@ -141,6 +141,9 @@ class PostController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $slugger = new AsciiSlugger('fr', ['fr' => [' ' => '-', 'à' => 'a', 'â' => 'a', 'é' => 'e', 'è' => 'e', 'ê' => 'e', 'î' => 'i', 'ï' => 'i', 'ô' => 'o', 'û' => 'u']]);
+            $post->setSlug($slugger->slug($post->getName()));
+
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('post_index', [], Response::HTTP_SEE_OTHER);
