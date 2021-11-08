@@ -42,7 +42,8 @@ class PostType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => false,
                 'by_reference' => false,
-                'prototype' => true
+                'prototype' => true,
+                'label' => false,
             ])
             ->add('videos', CollectionType::class, [
                 'entry_type' => VideoType::class,
@@ -50,7 +51,8 @@ class PostType extends AbstractType
                 'mapped' => true,
                 'allow_add' => true,
                 'by_reference' => false,
-                'allow_delete' => true
+                'allow_delete' => true,
+                'label' => false,
             ])
             ->add('group', EntityType::class, [
                 'class' => Group::class,
