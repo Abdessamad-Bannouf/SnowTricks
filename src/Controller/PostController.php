@@ -131,8 +131,7 @@ class PostController extends AbstractController
             'post' => $postRepository->findOneBy(['slug' => $slug]),
             'comments' => $commentRepository->findBy(['post' => $post], ['date' => 'desc'], $limitComments, $page * $limitComments),
             'form' => $form->createView(),
-            'totalComments' => $totalComments,
-            'limitComments' => $limitComments
+            'pages' => $totalComments / $limitComments,
         ]);
     }
 
