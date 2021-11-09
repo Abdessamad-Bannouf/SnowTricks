@@ -115,19 +115,24 @@ class PostController extends AbstractController
 
     /**
      * @Route("/{slug}", name="post_show", methods={"GET"})
+     * @Route("/{slug}/{page}", name="post_show_with_parameter_commentary", methods={"GET"})
      */
-    public function show($slug, Post $post, PostRepository $postRepository, Request $request, CommentRepository $commentRepository): Response
+    public function show($slug, $page = null, Post $post, PostRepository $postRepository, Request $request, CommentRepository $commentRepository): Response
     {
         $comment = new Comment();
         
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
 
+        $limitComments = 5;
+        $totalComments = count($commentRepository->findBy(['post' => $post], ['date' => 'desc']));
+        
         return $this->render('post/show.html.twig', [
             'post' => $postRepository->findOneBy(['slug' => $slug]),
-            'comments' => $commentRepository->findBy(['post' => $post]),
+            'comments' => $commentRepository->findBy(['post' => $post], ['date' => 'desc'], $limitComments, $page * $limitComments),
             'form' => $form->createView(),
-            
+            'totalComments' => $totalComments,
+            'limitComments' => $limitComments
         ]);
     }
 
