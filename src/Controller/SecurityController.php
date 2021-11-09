@@ -16,28 +16,27 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends AbstractController
 {
     /**
-     * @Route("/login", name="app_login")
+     * @Route("/inscription", name="security_registration")
      */
-    public function login(AuthenticationUtils $authenticationUtils): Response
-    {
-        // if ($this->getUser()) {
-        //     return $this->redirectToRoute('target_path');
-        // }
+    public function registration(Request $request, EntityManagerInterface $manager, UserPasswordHasherInterface $hash){
+        $user = new User;
 
-        // get the login error if there is one
-        $error = $authenticationUtils->getLastAuthenticationError();
-        // last username entered by the user
-        $lastUsername = $authenticationUtils->getLastUsername();
+        $form = $this->createForm(RegistrationType::class, $user);
 
-        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
-    }
+        $form->handleRequest($request);
 
-    /**
-     * @Route("/logout", name="app_logout")
-     */
-    public function logout()
-    {
-        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+        if($form->isSubmitted() AND $form->isValid()){
+            $hash = $hash->hashPassword($user, $user->getPassword());
+
+            $user->setPassword($hash);
+            
+            $manager->persist($user);
+            $manager->flush();
+        }
+
+        return $this->render('security/registration.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 
     /**
