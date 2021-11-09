@@ -5,6 +5,7 @@
 {% block body %}
     <h1>Post</h1>
 
+    {# Affichage des posts (tricks) #}
     <table class="table">
         <tbody>
             <tr>
@@ -44,9 +45,39 @@
         </tbody>
     </table>
 
+    {# Formulaire pour le commentaire #}
+    {{ form_start(form, {'action': path('comment_new')}) }}
+    {{ form_widget(form.content ) }}
+    {{ form_widget(form.postId, {'value' : post.id} ) }}
+    {{ form_end(form) }}
+
+    {# Affichage des commentaires #}
+    {% for comment in comments %}
+            <div>
+                <p>{{ comment.date ? comment.date|date('Y-m-d H:i:s') : '' }}</p>
+                <p>{{ comment.content }}</p>
+                <p>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('comment_show', {'id': comment.id}) }}">show</a>
+                        <a href="{{ path('comment_edit', {'id': comment.id}) }}">edit</a>
+                    {% endif %}
+                </p>
+                <hr/>
+            </div>
+        {% endfor %}
+
     <a href="{{ path('post_index') }}">back to list</a>
 
-    <a href="{{ path('post_edit', {'id': post.id}) }}">edit</a>
+    <a href="{{ path('post_edit', {'slug': post.slug}) }}">edit</a>
 
     {{ include('post/_delete_form.html.twig') }}
+
+    {# On crée une boucle qui va de 0 au nombre de pages (total commentaires /limit commentaires) #}
+        {% for i in 0 .. pages %}
+            <a href="{{ path('post_show_with_parameter_commentary', {'slug': post.slug, 'page': i}) }}">{{ i+1 }}</a>
+            {# Si il y a un nombre de commentaires impairs, on crée une dernière page #}
+            {# if (totalComments % limitComments > 0) and (i == (totalComments % limitComments) + 1) #}
+                <!--<a href="{# path('post_show_with_parameter_commentary', {'slug': post.slug, 'page': i + 1}) }}">{{ i + 1 #}</a>!-->
+            {# endif #}
+        {% endfor %}
 {% endblock %}
