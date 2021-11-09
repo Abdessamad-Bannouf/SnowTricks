@@ -16,7 +16,8 @@ class VideoType extends AbstractType
             ->add('name', TextType::class, ['attr' => [
                 'placeholder' => "Lien vidéo",
                 'mapped' => true
-            ]]);
+            ]])
+        ;
     }
     
   public function configureOptions(OptionsResolver $resolver)
