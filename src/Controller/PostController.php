@@ -155,12 +155,14 @@ class PostController extends AbstractController
 
         $limitComments = 5;
         $totalComments = count($commentRepository->findBy(['post' => $post], ['date' => 'desc']));
+
+        (int) $pages = intval($totalComments / $limitComments);
         
         return $this->render('post/show.html.twig', [
             'post' => $postRepository->findOneBy(['slug' => $slug]),
             'comments' => $commentRepository->findBy(['post' => $post], ['date' => 'desc'], $limitComments, $page * $limitComments),
             'form' => $form->createView(),
-            'pages' => $totalComments / $limitComments,
+            'pages' => $pages,
         ]);
     }
 
