@@ -9,7 +9,9 @@ use App\Entity\Video;
 use App\Form\CommentType;
 use App\Form\PostType;
 use App\Repository\CommentRepository;
+use App\Repository\PhotoRepository;
 use App\Repository\PostRepository;
+use App\Repository\VideoRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -146,7 +148,7 @@ class PostController extends AbstractController
      * @Route("/{slug}", name="post_show", methods={"GET"})
      * @Route("/{slug}/{page}", name="post_show_with_parameter_commentary", methods={"GET"})
      */
-    public function show($slug, $page = null, Post $post, PostRepository $postRepository, Request $request, CommentRepository $commentRepository): Response
+    public function show($slug, $page = null, Post $post, PostRepository $postRepository, Request $request, PhotoRepository $photoRepository, VideoRepository $videoRepository, CommentRepository $commentRepository): Response
     {
         $comment = new Comment();
         
@@ -156,10 +158,15 @@ class PostController extends AbstractController
         $limitComments = 5;
         $totalComments = count($commentRepository->findBy(['post' => $post], ['date' => 'desc']));
 
+        $photos = $photoRepository->findBy(['post' => $post]);
+        $videos = $videoRepository->findBy(['post' => $post]);
+
         (int) $pages = intval($totalComments / $limitComments);
         
         return $this->render('post/show.html.twig', [
             'post' => $postRepository->findOneBy(['slug' => $slug]),
+            'photos' => $photos,
+            'videos' => $videos,
             'comments' => $commentRepository->findBy(['post' => $post], ['date' => 'desc'], $limitComments, $page * $limitComments),
             'form' => $form->createView(),
             'pages' => $pages,
