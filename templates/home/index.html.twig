@@ -60,28 +60,26 @@
             <nav id="nav-menu-container">
                 <ul class="nav-menu">
                     <li class="menu-active"><a href="index.html">Home</a></li>
-                    <li><a href="#about">About Us</a></li>
-                    <li><a href="#services">Services</a></li>
-                    <li><a href="#portfolio">Portfolio</a></li>
-                    <li><a href="#team">Team</a></li>
-                    <li class="menu-has-children"><a href="">Drop Down</a>
+                    <li><a href="https://localhost:8000">Accueil</a></li>
+                    <li><a href="https://localhost:8000/post">tricks</a></li>
+                    <li><a href="https://localhost:8000/login">Login</a></li>
                         <ul>
                             <li><a href="#">Drop Down 1</a></li>
                             <li class="menu-has-children"><a href="#">Drop Down 2</a>
                                 <ul>
-                                    <li><a href="#">Deep Drop Down 1</a></li>
-                                    <li><a href="#">Deep Drop Down 2</a></li>
-                                    <li><a href="#">Deep Drop Down 3</a></li>
-                                    <li><a href="#">Deep Drop Down 4</a></li>
-                                    <li><a href="#">Deep Drop Down 5</a></li>
+                                    <li class="menu-active"><a href="index.html">Home</a></li>
+                                    <li><a href="#about">Accueil</a></li>
+                                    <li><a href="https://localhost:8000/posts">tricks</a></li>
+                                    <li><a href="https://localhost:8000/login">Login</a></li>
                                 </ul>
                             </li>
-                            <li><a href="#">Drop Down 3</a></li>
-                            <li><a href="#">Drop Down 4</a></li>
-                            <li><a href="#">Drop Down 5</a></li>
+                            <li class="menu-active"><a href="index.html">Home</a></li>
+                            <li><a href="#about">Accueil</a></li>
+                            <li><a href="https://localhost:8000/posts">tricks</a></li>
+                            <li><a href="https://localhost:8000/login">Login</a></li>
                         </ul>
                     </li>
-                    <li><a href="#contact">Contact Us</a></li>
+                    <li><a href="#contact">Contactez-nous</a></li>
                 </ul>
             </nav><!-- #nav-menu-container -->
         </div>
@@ -90,9 +88,9 @@
     <!-- ======= Hero Section ======= -->
     <section id="hero">
         <div class="hero-container" data-aos="zoom-in" data-aos-delay="100">
-            <h1>Welcome to Regna</h1>
-            <h2>We are team of talented designers making websites with Bootstrap</h2>
-            <a href="#about" class="btn-get-started">Get Started</a>
+            <h1>Snow Tricks</h1>
+            <h2>Le site communautaire pour en apprendre plus sur le snow</h2>
+            <!--<a href="#" class="btn-get-started">Get Started</a>!-->
         </div>
     </section><!-- End Hero Section -->
 
@@ -106,8 +104,7 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ post.name }}</h5>
                             <p class="card-text">{{ post.description }}</p>
-                            <a href="#" class="btn mr-2"><i class="fas fa-link"></i> Visit Site</a>
-                            <a href="#" class="btn "><i class="fab fa-github"></i> Github</a>
+                            <a href="{{ path('post_show', {'slug': post.slug}) }}" class="btn mr-2"><i class="fas fa-link"></i>lien du trick</a>
                         </div>
                         <p>{{ post.date | date('d/m/y') }} à {{ post.date | date('H:i') }}</p>
                     </div>
