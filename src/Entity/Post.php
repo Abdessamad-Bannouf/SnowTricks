@@ -6,9 +6,12 @@ use App\Repository\PostRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=PostRepository::class)
+ * @UniqueEntity(fields={"name"})
  */
 class Post
 {
@@ -35,13 +38,20 @@ class Post
     private $photo;
 
     /**
+     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="post", orphanRemoval=true, cascade={"persist"})
+     */
+    private $videos;
+
+    /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $create_at;
 
     /**
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="post")
+     * @JoinColumn(onDelete="CASCADE")
      */
+
     private $comments;
 
     /**
@@ -49,9 +59,21 @@ class Post
      */
     private $group;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Photo::class, mappedBy="post", orphanRemoval=true, cascade={"persist"})
+     */
+    private $photos;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $slug;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->photos = new ArrayCollection();
+        $this->videos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -95,11 +117,6 @@ class Post
         return $this;
     }
 
-    public function getVideos(): ?string
-    {
-        return $this->videos;
-    }
-
     public function setVideos(string $videos): self
     {
         $this->videos = $videos;
@@ -128,6 +145,65 @@ class Post
     {
         $this->group = $group;
 
+        return $this;
+    }
+
+    /**
+     * @return Collection|Photo[]
+     */
+    public function getPhotos(): Collection
+    {
+        return $this->photos;
+    }
+
+    public function addPhoto(Photo $photo): self
+    {
+        if (!$this->photos->contains($photo)) {
+            $this->photos[] = $photo;
+            $photo->setPost($this);
+        }
+
+        return $this;
+    }
+
+    public function removePhoto(Photo $photo): self
+    {
+        if ($this->photos->removeElement($photo)) {
+            // set the owning side to null (unless already changed)
+            if ($photo->getPost() === $this) {
+                $photo->setPost(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Video[]
+     */
+    public function getVideos(): Collection
+    {
+        return $this->videos;
+    }
+
+    public function addVideo(Video $video): self
+    {
+        if (!$this->videos->contains($video)) {
+            $this->videos[] = $video;
+            $video->setPost($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVideo(Video $video): self
+    {
+        if ($this->videos->removeElement($video)) {
+            // set the owning side to null (unless already changed)
+            if ($video->getPost() === $this) {
+                $video->setPost(null);
+            }
+        }
         return $this;
     }
 
@@ -161,10 +237,15 @@ class Post
         return $this;
     }
 
-    public function __toString(){
-        // to show the name of the Category in the select
-        return $this->name;
-        // to show the id of the Category in the select
-        // return $this->id;
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
+
+        return $this;
     }
 }

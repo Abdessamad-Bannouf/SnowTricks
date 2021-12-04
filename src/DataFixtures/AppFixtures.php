@@ -9,6 +9,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use SebastianBergmann\Diff\Diff;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 
 class AppFixtures extends Fixture
 {
@@ -18,6 +19,9 @@ class AppFixtures extends Fixture
         // $manager->persist($product);
 
         $faker = Factory::create('fr_FR');
+
+        // Créer les différents sluggers
+        $slugger = new AsciiSlugger('fr', ['fr' => [' ' => '-', 'é' => 'e', 'è' => 'e', 'à' => 'a', 'ô' => 'o']]);
 
         //Créer 3 groupes de sky
 
@@ -34,8 +38,8 @@ class AppFixtures extends Fixture
                 $post->setName($faker->word)
                 ->setDescription($description)
                 ->setPhoto($faker->imageUrl())
-                ->setVideo($faker->url('https://www.youtube.com/watch?v=SQyTWk7OxSI'))
                 ->setDate($faker->dateTimeBetween('2021-01-01', 'now'))
+                ->setSlug($slugger->slug($post->getName()))
                 ->setGroup($group);
 
                 $manager->persist($post);
@@ -45,7 +49,7 @@ class AppFixtures extends Fixture
                     $comment = new Comment;
                     $content = join($faker->paragraphs(5));
 
-                    $comment->setName($faker->name)
+                    $comment->setContent($faker->name)
                     ->setDate($faker->dateTimeBetween('2021-01-01', 'now'))
                     ->setContent($faker->sentence(20, true))
                     ->setPost($post);
