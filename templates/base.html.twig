@@ -18,6 +18,25 @@
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <!--  Navbar !-->
+        <header>
+            <nav>
+                <div class="menu-icon">
+                    <i class="fa fa-bars fa-2x"></i>
+                </div>
+                <div class="logo">
+                    Snow Tricks
+                </div>
+                <div class="menu">
+                    <ul>
+                        <li><a href="{{ path('home') }}">Home</a></li>
+                        <li><a href="{{ path('post_index') }}">Tricks</a></li>
+                        <li><a href="{{ path('app_login') }}">Login</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        {% block body %}
+        {% endblock %}
     </body>
 </html>
