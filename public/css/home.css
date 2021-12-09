@@ -14,8 +14,10 @@ header {
   height: 100px;
   background-size: cover;
   position: fixed;
+  top: 0px;
   z-index: 1000;
-  background-color: black;
+  background-color: grey;
+  opacity: 0.6;
 }
 
 .content {
@@ -54,10 +56,6 @@ nav ul {
   margin: 0;
   padding-right: 40px;
   transition: 1s;
-}
-
-nav.black ul {
-  background: #000;
 }
 
 nav ul li {
