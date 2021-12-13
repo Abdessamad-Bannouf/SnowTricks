@@ -16,27 +16,20 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends AbstractController
 {
     /**
-     * @Route("/inscription", name="security_registration")
+     * @Route("/login", name="app_login")
      */
-    public function registration(Request $request, EntityManagerInterface $manager, UserPasswordHasherInterface $hash){
-        $user = new User;
+    public function login(AuthenticationUtils $authenticationUtils): Response
+    {
+        // if ($this->getUser()) {
+        //     return $this->redirectToRoute('target_path');
+        // }
 
-        $form = $this->createForm(RegistrationType::class, $user);
+        // get the login error if there is one
+        $error = $authenticationUtils->getLastAuthenticationError();
+        // last username entered by the user
+        $lastUsername = $authenticationUtils->getLastUsername();
 
-        $form->handleRequest($request);
-
-        if($form->isSubmitted() AND $form->isValid()){
-            $hash = $hash->hashPassword($user, $user->getPassword());
-
-            $user->setPassword($hash);
-            
-            $manager->persist($user);
-            $manager->flush();
-        }
-
-        return $this->render('security/registration.html.twig', [
-            'form' => $form->createView()
-        ]);
+        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
 
     /**
