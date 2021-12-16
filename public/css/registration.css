@@ -90,3 +90,7 @@ input:focus {
 .mb-3 {
     color:white;
 }
+
+.required {
+    color: white;
+}

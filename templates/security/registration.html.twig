@@ -24,21 +24,9 @@
 {% endblock %}
 
 {% block body %}
-
-<h1>Inscription sur le site</h1>
-
 <div class="container">
     <div class="d-flex justify-content-center h-100">
         <div class="card">
-            <div class="card-header">
-                <h3>Inscription</h3>
-                <div class="d-flex justify-content-end social_icon">
-                    <span><i class="fab fa-facebook-square"></i></span>
-                    <span><i class="fab fa-google-plus-square"></i></span>
-                    <span><i class="fab fa-twitter-square"></i></span>
-                </div>
-            </div>
-
             <div class="card-body">
                 {{ form_start(form) }}
                     
@@ -54,7 +42,7 @@
 
             <div class="card-footer">
                 <div class="d-flex justify-content-center links">
-                    Vous n'avez pas de compte ? <a href="#">S'inscrire</a>
+                    Vous avez déjà un compte ? <a href="{{ path('app_login') }}">Se connecter</a>
                 </div>
             </div>
         </div>
