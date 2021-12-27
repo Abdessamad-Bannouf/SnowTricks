@@ -65,25 +65,21 @@ class PhotoController extends AbstractController
      */
     public function edit(Request $request, Photo $photo): Response
     {
-        //$file = new File($this->getParameter('images_directory').'/'.$photo->getName());
-
-        /*$file = $photo->getName();
-        $photo->setName($file);
-
-        if ($file instanceof UploadedFile) {
-            $fileName = md5(uniqid()).'.'.$file->guessExtension();
-            $file->move(
-               $this->getParameter('profile.picture.attachment.dir'),
-               $fileName
-           );
-           die("test");
-           $photo->setPicture($fileName);
-           //$em->persist($photo); // Place here
-       }*/
         $form = $this->createForm(PhotoType::class, $photo);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // On récupère l'image principale qui va servir pour la page pour afficher la liste
+            $postPhoto = $form->get('photo')->getData();
+            $image = new File($postPhoto);
+            $fichier = md5(uniqid()) . '.' . $image->guessExtension();
+
+            // On copie le fichier dans le dossier upload
+            $postPhoto->move(
+                $this->getParameter('images_directory'),
+                $fichier);
+            $postPhoto = $photo->setName($fichier);
+            $photo->setName($photo->getName());
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('photo_index', [], Response::HTTP_SEE_OTHER);
