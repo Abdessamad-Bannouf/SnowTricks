@@ -214,14 +214,20 @@
 
     {{ include('post/_delete_form.html.twig') }}
 
+    
     {# On crée une boucle qui va de 0 au nombre de pages (total commentaires /limit commentaires) #}
-    {% if pages > 0 %}
-        {% for i in 0 .. pages %}
+    {% for i in 0 .. pages %}
+        {% if pages == 0 %}
             <a href="{{ path('post_show_with_parameter_commentary', {'slug': post.slug, 'page': i}) }}">{{ i+1 }}</a>
+        {% endif %}
+
+        {% if pages > 0 %}
+        
+            <a href="{{ path('post_show_with_parameter_commentary', {'slug': post.slug, 'page': i}) }}">{{ i+1 }}    </a>
             {# Si il y a un nombre de commentaires impairs, on crée une dernière page #}
             {# if (totalComments % limitComments > 0) and (i == (totalComments % limitComments) + 1) #}
                 <!--<a href="{# path('post_show_with_parameter_commentary', {'slug': post.slug, 'page': i + 1}) }}">{{ i + 1 #}</a>!-->
             {# endif #}
-        {% endfor %}
-    {% endif %}
+            {% endif %}
+    {% endfor %}
 {% endblock %}
