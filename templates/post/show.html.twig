@@ -164,9 +164,24 @@
         {# Affichage des videos #}
         <div class="ml-5 row">
             {% for video in videos %}
-            <div class="col-md-4 col-sm-12 mb-3">
-                <iframe src="{{ video.name }}" width="420" height="113"></iframe> 
+            <div class="col-md-4 col-sm-12 mb-3">   
+                <iframe src="{{ video.name }}" width="420" height="113"></iframe>
+                <form method="post" action="{{ path('video_delete', {'id': video.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ video.id) }}">
+                    <div class="crud-button" style="">
+                        <button class="btn">
+                            <span>
+                                <i class="fa fa-trash">
+                                </i>
+                            </span>
+                        </button>
+                        <span class="btn">
+                            <a href="{{ path('video_edit', {'id': video.id}) }}"><i class="fa fa-pencil"></a></i> 
+                        </span>
+                    </div>
+                </form>
             </div> 
+
             {% endfor %}
         </div>
       
