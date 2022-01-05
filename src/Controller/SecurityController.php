@@ -8,9 +8,12 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
 use App\Form\RegistrationType;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Security\Http\SecurityEvents;
 
 class SecurityController extends AbstractController
 {
@@ -42,7 +45,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/inscription", name="security_registration")
      */
-    public function registration(Request $request, EntityManagerInterface $manager, UserPasswordHasherInterface $hash){
+    public function registration(Request $request, EntityManagerInterface $manager, UserPasswordHasherInterface $hash, EventDispatcherInterface $dispatcher){
         $user = new User;
 
         $form = $this->createForm(RegistrationType::class, $user);
@@ -56,6 +59,15 @@ class SecurityController extends AbstractController
             
             $manager->persist($user);
             $manager->flush();
+
+            // Redirect after registration
+            $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
+            $this->get("security.token_storage")->setToken($token);
+
+            $event = new SecurityEvents($request);
+            $dispatcher->dispatch($event, SecurityEvents::INTERACTIVE_LOGIN);
+
+            return $this->redirectToRoute('home');
         }
 
         return $this->render('security/registration.html.twig', [
