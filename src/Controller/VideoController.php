@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Video;
 use App\Form\VideoType;
+use App\Repository\PostRepository;
 use App\Repository\VideoRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +29,7 @@ class VideoController extends AbstractController
     /**
      * @Route("/new", name="video_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, PostRepository $postRepository): Response
     {
         $video = new Video();
         $form = $this->createForm(VideoType::class, $video);
@@ -39,7 +40,10 @@ class VideoController extends AbstractController
             $entityManager->persist($video);
             $entityManager->flush();
 
-            return $this->redirectToRoute('video_index', [], Response::HTTP_SEE_OTHER);
+            $getPostWithPhoto  = $postRepository->findBy(['id' => $video->getPost()]);
+            $slug = $getPostWithPhoto[0]->getSlug();
+
+            return $this->redirectToRoute('post_show', ['slug' => $slug], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('video/new.html.twig', [
@@ -61,7 +65,7 @@ class VideoController extends AbstractController
     /**
      * @Route("/{id}/edit", name="video_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Video $video): Response
+    public function edit(Request $request, Video $video, PostRepository $postRepository): Response
     {
         $form = $this->createForm(VideoType::class, $video);
         $form->handleRequest($request);
@@ -69,7 +73,10 @@ class VideoController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('video_index', [], Response::HTTP_SEE_OTHER);
+            $getPostWithPhoto  = $postRepository->findBy(['id' => $video->getPost()]);
+            $slug = $getPostWithPhoto[0]->getSlug();
+
+            return $this->redirectToRoute('post_show', ['slug' => $slug], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('video/edit.html.twig', [
@@ -81,7 +88,7 @@ class VideoController extends AbstractController
     /**
      * @Route("/{id}", name="video_delete", methods={"POST"})
      */
-    public function delete(Request $request, Video $video): Response
+    public function delete(Request $request, Video $video, PostRepository $postRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$video->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
@@ -89,6 +96,9 @@ class VideoController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('video_index', [], Response::HTTP_SEE_OTHER);
+        $getPostWithPhoto  = $postRepository->findBy(['id' => $video->getPost()]);
+            $slug = $getPostWithPhoto[0]->getSlug();
+
+            return $this->redirectToRoute('post_show', ['slug' => $slug], Response::HTTP_SEE_OTHER);
     }
 }
