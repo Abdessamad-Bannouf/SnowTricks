@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomeController!{% endblock %}
+
+{% block stylesheets %}
+<!-- Vendor CSS Files -->
+    <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="/assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="/assets/vendor/venobox/venobox.css" rel="stylesheet">
+    <link href="/assets/vendor/aos/aos.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="/css/home.css" rel="stylesheet">
+
+    <!-- Template card -->
+    <link href="/css/card.css" rel="stylesheet">
+
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="/assets/img/favicon.png" rel="icon">
+    <link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Poppins:300,400,500,700" rel="stylesheet">
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}
+
+{% block body %}
+
+    <!-- ======= Hero Section ======= -->
+    <section id="hero">
+        <div class="hero-container aos-animate" data-aos="zoom-in" data-aos-delay="100">
+            <h1>Snow Tricks</h1>
+            <h2>Le site communautaire pour en apprendre plus sur le snow</h2>
+            <!--<a href="#" class="btn-get-started">Get Started</a>!-->
+        </div>
+    </section><!-- End Hero Section -->
+
+    
+        <div class="container mx-auto mt-4">
+            <div class="row">
+            {% for post in posts %}
+                <div class="col-md-4">
+                    <div class="card" style="width: 18rem;">
+                        <img src="{{ asset('uploads/photos/' ~ post.photo) }}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ post.name }}</h5>
+                            <p class="card-text">{{ post.description }}</p>
+                            <a href="{{ path('post_show', {'slug': post.slug}) }}" class="btn mr-2"><i class="fas fa-link"></i>lien du trick</a>
+                            <form method="post" action="{{ path('post_delete', {'slug': post.slug}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ post.slug) }}">
+                                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                <div class="crud-button" style="">
+                                    <button class="btn">
+                                        <span>
+                                            <i class="fa fa-trash">
+                                            </i>
+                                        </span>
+                                    </button>
+                            </form>
+                                    <button class="btn">
+                                        <span>
+                                            <a href="{{ path('post_edit', {'slug': post.slug}) }}">
+                                                <i class="fa fa-pencil"></i>
+                                            </a>
+                                        </span>
+                                    </button>
+                                </div>
+                                {% endif %}
+                        </div>
+                        <p class="date">{{ post.date | date('d/m/y') }} à {{ post.date | date('H:i') }}</p>
+                    </div>
+                </div> 
+            {% endfor %}   
+            </div>
+        </div>
+   
+
+    <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+{% endblock %}
