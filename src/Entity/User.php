@@ -48,7 +48,7 @@ class User implements UserInterface
     private $confirm_password;
 
     /**
-     * @ORM\Column(type="string", length=30, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $photo;
 
@@ -180,5 +180,12 @@ class User implements UserInterface
             return ['ROLE_ADMIN'];
         }
         return ['ROLE_USER'];
+    }
+
+    public function setRoles(string $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
     }
 }
