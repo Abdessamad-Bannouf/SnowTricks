@@ -30,7 +30,7 @@
                     <td>{{ post.photo }}</td>
                     <td>{{ post.date | date('d/m/y') }} à {{ post.date | date('H:i') }}</td>
                     <td>
-                        {% if is_granted('ROLE_ADMIN') %}
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                         <a href="{{ path('post_show', {'slug': post.slug}) }}">show</a>
                         <a href="{{ path('post_edit', {'slug': post.slug}) }}">edit</a>
                         {% endif %}
@@ -43,7 +43,8 @@
             {% endfor %}
             </tbody>
         </table>
-
-        <a href="{{ path('post_new') }}">Create new</a>
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            <a href="{{ path('post_new') }}">Créer un trick</a>
+        {% endif %}
     </div>
 {% endblock %}
