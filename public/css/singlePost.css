@@ -1,0 +1,20 @@
+img {
+    height: 115px;
+    width: 200px;
+}
+
+iframe {
+    width: 200px;
+}
+
+.photo {
+    margin-right: 0.1%;
+}
+
+.crud-button {
+    display: inline;
+}
+
+.container {
+    margin-top: 100px;
+}

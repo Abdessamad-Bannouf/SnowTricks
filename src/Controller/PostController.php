@@ -2,16 +2,23 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Photo;
 use App\Entity\Post;
 use App\Entity\Video;
+use App\Form\CommentType;
 use App\Form\PostType;
+use App\Repository\CommentRepository;
+use App\Repository\PhotoRepository;
 use App\Repository\PostRepository;
+use App\Repository\VideoRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 
 /**
  * @Route("/post")
@@ -34,6 +41,8 @@ class PostController extends AbstractController
     public function new(Request $request): Response
     {
         $post = new Post();
+
+        $entityManager = $this->getDoctrine()->getManager();
         
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
@@ -62,6 +71,8 @@ class PostController extends AbstractController
                 $post->addPhoto($photo);
             }
 
+
+
             // On boucle sur les images
             foreach($videos as $link){
                 // On stocke la vidéo dans la base de données (son nom)
@@ -69,6 +80,7 @@ class PostController extends AbstractController
                 $link->setName($link->getName());
                 $post->addVideo($link);
             }
+
 
             // On récupère l'image principale qui va servir pour la page pour afficher la liste
             $mainImage = $form->get('photo')->getData();
@@ -84,17 +96,21 @@ class PostController extends AbstractController
             $date = new \DateTime();
             $date = $post->setDate($date);
 
-            $entityManager = $this->getDoctrine()->getManager();
+            //On persiste le nom sluggé dans la colonne slug
+            $slugger = new AsciiSlugger('fr', ['fr' => [' ' => '-', 'à' => 'a', 'â' => 'a', 'é' => 'e', 'è' => 'e', 'ê' => 'e', 'î' => 'i', 'ï' => 'i', 'ô' => 'o', 'û' => 'u']]);
+            $post->setSlug($slugger->slug($post->getName()));
 
+            $entityManager = $this->getDoctrine()->getManager();
+          
             // On stocke l'image principale dans la base de données (son nom)
-            $entityManager->persist($mainImage);
+            //$entityManager->persist($mainImage);
             // On stocke la date dans la base de données
-            $entityManager->persist($date);
+            //$entityManager->persist($date);
             $entityManager->persist($post);
             
             $entityManager->flush();
 
-            return $this->redirectToRoute('post_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('post/new.html.twig', [
@@ -104,17 +120,7 @@ class PostController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="post_show", methods={"GET"})
-     */
-    public function show(Post $post): Response
-    {
-        return $this->render('post/show.html.twig', [
-            'post' => $post,
-        ]);
-    }
-
-    /**
-     * @Route("/{id}/edit", name="post_edit", methods={"GET","POST"})
+     * @Route("/{slug}/edit", name="post_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Post $post): Response
     {
@@ -122,9 +128,12 @@ class PostController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $slugger = new AsciiSlugger('fr', ['fr' => [' ' => '-', 'à' => 'a', 'â' => 'a', 'é' => 'e', 'è' => 'e', 'ê' => 'e', 'î' => 'i', 'ï' => 'i', 'ô' => 'o', 'û' => 'u']]);
+            $post->setSlug($slugger->slug($post->getName()));
+
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('post_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('post/edit.html.twig', [
@@ -134,16 +143,46 @@ class PostController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="post_delete", methods={"POST"})
+     * @Route("/{slug}", name="post_show", methods={"GET"})
+     * @Route("/{slug}/{page}", name="post_show_with_parameter_commentary", methods={"GET"})
+     */
+    public function show($slug, $page = null, Post $post, PostRepository $postRepository, Request $request, PhotoRepository $photoRepository, VideoRepository $videoRepository, CommentRepository $commentRepository): Response
+    {
+        $comment = new Comment();
+        
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+
+        $limitComments = 5;
+        $totalComments = count($commentRepository->findBy(['post' => $post], ['date' => 'desc']));
+
+        $photos = $photoRepository->findBy(['post' => $post]);
+        $videos = $videoRepository->findBy(['post' => $post]);
+
+        (int) $pages = intval($totalComments / $limitComments);
+        
+        return $this->render('post/show.html.twig', [
+            'post' => $postRepository->findOneBy(['slug' => $slug]),
+            'photos' => $photos,
+            'videos' => $videos,
+            'comments' => $commentRepository->findBy(['post' => $post], ['date' => 'desc'], $limitComments, $page * $limitComments),
+            'form' => $form->createView(),
+            'pages' => $pages,
+        ]);
+    }
+
+    /**
+     * @Route("/{slug}", name="post_delete", methods={"POST"})
      */
     public function delete(Request $request, Post $post): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$post->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$post->getSlug(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
+            
             $entityManager->remove($post);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('post_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
     }
 }

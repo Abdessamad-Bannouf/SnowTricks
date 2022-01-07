@@ -32,3 +32,16 @@
     box-shadow: #222 1px 0 10px;
     text-decoration: underline;
   }
+
+  .crud-button {
+    margin-left: 50px;
+   
+  }
+  
+  .mr-2 {
+    margin-left: 30px; 
+    margin-bottom: 15px;
+  }
+  .date {
+    margin-left: 50px;
+  }
