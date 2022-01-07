@@ -37,7 +37,6 @@ class PostController extends AbstractController
 
     /**
      * @Route("/new", name="post_new", methods={"GET","POST"})
-     * @IsGranted("ROLE_ADMIN")
      */
     public function new(Request $request): Response
     {
@@ -111,7 +110,7 @@ class PostController extends AbstractController
             
             $entityManager->flush();
 
-            return $this->redirectToRoute('post_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('post/new.html.twig', [
@@ -122,7 +121,6 @@ class PostController extends AbstractController
 
     /**
      * @Route("/{slug}/edit", name="post_edit", methods={"GET","POST"})
-     * @IsGranted("ROLE_ADMIN")
      */
     public function edit(Request $request, Post $post): Response
     {
@@ -135,7 +133,7 @@ class PostController extends AbstractController
 
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('post_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('post/edit.html.twig', [
@@ -175,7 +173,6 @@ class PostController extends AbstractController
 
     /**
      * @Route("/{slug}", name="post_delete", methods={"POST"})
-     * @IsGranted("ROLE_ADMIN")
      */
     public function delete(Request $request, Post $post): Response
     {
@@ -186,6 +183,6 @@ class PostController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('post_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
     }
 }
