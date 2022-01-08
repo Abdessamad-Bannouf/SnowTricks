@@ -100,8 +100,10 @@ Si l’utilisateur est authentifié, il peut voir un formulaire au dessus de la 
   
 
   
-# Installation du projet : 
-
+# Installation du projet :  
+  
+    ● Cloner le projet : git clone https://github.com/Abdessamad-Bannouf/SnowTricks.git  
+    
     ● Installer le gestionnaire de dépendance : composer  
 
     ● Lancer la commande : composer install  
