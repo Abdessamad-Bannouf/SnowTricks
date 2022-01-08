@@ -110,4 +110,6 @@ Si l’utilisateur est authentifié, il peut voir un formulaire au dessus de la 
 
     ● Lancer la commande : php bin/console doctrine:migrations:migrate  
 
-    ● Lancer la commande : php bin/console doctrine:fixtures:load
+    ● Lancer la commande : php bin/console doctrine:fixtures:load  
+
+    ● Aller sur l'url : https://localhost:8000/home
