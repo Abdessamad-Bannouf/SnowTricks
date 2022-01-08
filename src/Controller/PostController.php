@@ -113,6 +113,9 @@ class PostController extends AbstractController
                 
                 $entityManager->flush();
 
+                
+                $this->addFlash('success-add-trick', 'Trick ajouté !');
+
                 return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
             }
 
@@ -140,6 +143,8 @@ class PostController extends AbstractController
                 $post->setSlug($slugger->slug($post->getName()));
 
                 $this->getDoctrine()->getManager()->flush();
+
+                $this->addFlash('success-edit-trick', 'Trick modifié !');
 
                 return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
             }
@@ -194,6 +199,7 @@ class PostController extends AbstractController
             $entityManager->flush();
         }
 
+        $this->addFlash('success-delete-trick', 'Trick supprimé !');
         return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
     }
 }

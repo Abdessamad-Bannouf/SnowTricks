@@ -25,6 +25,11 @@ class SecurityController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         if ($this->getUser()) {
+            // Si l'utilisateur est connecté, il y a un message flash pour le login
+            $this->addFlash(
+                'succes-login',
+                'Vous êtes connectés !'
+            );
             return $this->redirectToRoute('home');
         }
 
@@ -85,6 +90,12 @@ Snow Tricks - Blog')
 
             $event = new SecurityEvents($request);
             $dispatcher->dispatch($event, SecurityEvents::INTERACTIVE_LOGIN);
+
+            // Si l'inscription s'est bien passée, il y a un message flash pour l'inscription
+            $this->addFlash(
+                'succes-registration',
+                'Inscription finalisée, ne venons de vous envoyer un mail pour vous confirmer l\'inscription'
+            );
 
             return $this->redirectToRoute('home');
         }
