@@ -107,8 +107,13 @@ Si l’utilisateur est authentifié, il peut voir un formulaire au dessus de la 
     ● Installer le gestionnaire de dépendance : composer  
 
     ● Lancer la commande : composer install  
-
-    ● Lancer la commande : php bin/console doctrine:database:create.  
+        Do you trust "composer/package-versions-deprecated" to execute code and wish to enable it now? (writes "allow-plugins" to composer.json) [y,n,d,?] : TAPEZ Y  
+        Do you trust "symfony/flex" to execute code and wish to enable it now? (writes "allow-plugins" to composer.json) [y,n,d,?] : TAPEZ N  
+        Do you trust "symfony/runtime" to execute code and wish to enable it now? (writes "allow-plugins" to composer.json) [y,n,d,?] : TAPEZ Y  
+        
+    ● Lancer la commande : php bin/console doctrine:database:create  
+      
+    ● Lancer la commande : php bin/console make:migration  
 
     ● Lancer la commande : php bin/console doctrine:migrations:migrate  
 
