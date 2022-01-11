@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Snow trick - Home!{% endblock %}
 
 {% block stylesheets %}
 <!-- Vendor CSS Files -->
@@ -35,16 +35,48 @@
 {% endblock %}
 
 {% block body %}
-
     <!-- ======= Hero Section ======= -->
     <section id="hero">
         <div class="hero-container aos-animate" data-aos="zoom-in" data-aos-delay="100">
+
+            {# message flash pour l'inscription #}
+            {% for message in app.flashes('succes-registration') %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+            {# message flash pour le login #}
+            {% for message in app.flashes('succes-login') %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+            {# message flash pour l'ajout de trick #}
+            {% for message in app.flashes('success-add-trick') %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+            {# message flash pour l'edit de trick #}
+            {% for message in app.flashes('success-edit-trick') %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+            {# message flash pour la suppression de trick #}
+            {% for message in app.flashes('success-delete-trick') %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
             <h1>Snow Tricks</h1>
             <h2>Le site communautaire pour en apprendre plus sur le snow</h2>
-            <!--<a href="#" class="btn-get-started">Get Started</a>!-->
         </div>
-    </section><!-- End Hero Section -->
-
+    </section>
     
         <div class="container mx-auto mt-4">
             <div class="row">
