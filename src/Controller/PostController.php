@@ -30,9 +30,13 @@ class PostController extends AbstractController
      */
     public function index(PostRepository $postRepository): Response
     {
-        return $this->render('post/index.html.twig', [
-            'posts' => $postRepository->findAll(),
-        ]);
+        if($this->getUser()) { 
+            return $this->render('post/index.html.twig', [
+                'posts' => $postRepository->findAll(),
+            ]);
+        }
+
+        return $this->render('404/404.html.twig', []);
     }
 
     /**
@@ -125,7 +129,7 @@ class PostController extends AbstractController
             ]);     
         }
         
-        return $this->render('post/404.html.twig', []);
+        return $this->render('404/404.html.twig', []);
     }
 
     /**
@@ -155,7 +159,7 @@ class PostController extends AbstractController
             ]);
         }
 
-        return $this->render('post/404.html.twig', []);
+        return $this->render('404/404.html.twig', []);
     }
 
     /**
@@ -164,27 +168,31 @@ class PostController extends AbstractController
      */
     public function show($slug, $page = null, Post $post, PostRepository $postRepository, Request $request, PhotoRepository $photoRepository, VideoRepository $videoRepository, CommentRepository $commentRepository): Response
     {
-        $comment = new Comment();
-        
-        $form = $this->createForm(CommentType::class, $comment);
-        $form->handleRequest($request);
+        if($this->getUser()) {
+            $comment = new Comment();
+            
+            $form = $this->createForm(CommentType::class, $comment);
+            $form->handleRequest($request);
 
-        $limitComments = 10;
-        $totalComments = count($commentRepository->findBy(['post' => $post], ['date' => 'desc']));
+            $limitComments = 10;
+            $totalComments = count($commentRepository->findBy(['post' => $post], ['date' => 'desc']));
 
-        $photos = $photoRepository->findBy(['post' => $post]);
-        $videos = $videoRepository->findBy(['post' => $post]);
+            $photos = $photoRepository->findBy(['post' => $post]);
+            $videos = $videoRepository->findBy(['post' => $post]);
 
-        (int) $pages = intval($totalComments / $limitComments);
-        
-        return $this->render('post/show.html.twig', [
-            'post' => $postRepository->findOneBy(['slug' => $slug]),
-            'photos' => $photos,
-            'videos' => $videos,
-            'comments' => $commentRepository->findBy(['post' => $post], ['date' => 'desc'], $limitComments, $page * $limitComments),
-            'form' => $form->createView(),
-            'pages' => $pages,
-        ]);
+            (int) $pages = intval($totalComments / $limitComments);
+            
+            return $this->render('post/show.html.twig', [
+                'post' => $postRepository->findOneBy(['slug' => $slug]),
+                'photos' => $photos,
+                'videos' => $videos,
+                'comments' => $commentRepository->findBy(['post' => $post], ['date' => 'desc'], $limitComments, $page * $limitComments),
+                'form' => $form->createView(),
+                'pages' => $pages,
+            ]);
+        }
+
+        return $this->render('404/404.html.twig', []);
     }
 
     /**
