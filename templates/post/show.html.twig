@@ -22,110 +22,18 @@
     <div class="container">
         <h1>Post</h1>
         <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title mb-4">
-                            <div class="d-flex justify-content-start">
-                                <div class="image-container">
-                                    <img src="{{ asset('uploads/photos/' ~ post.photo) }}" id="imgProfile" style="width: 150px; height: 150px" class="img-thumbnail" />
-                                </div>
-                                <div class="userData ml-3">
-                                    <h2 class="d-block" style="font-size: 1.5rem; font-weight: bold"><a href="javascript:void(0);">Figure numéro {{ post.id }}</a></h2>
-                                </div>
-                                <div class="ml-auto">
-                                    <input type="button" class="btn btn-primary d-none" id="btnDiscard" value="Discard Changes" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-12">
-                                <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" id="basicInfo-tab" data-toggle="tab" href="#basicInfo" role="tab" aria-controls="basicInfo" aria-selected="true">Information</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="connectedServices-tab" data-toggle="tab" href="#connectedServices" role="tab" aria-controls="connectedServices" aria-selected="false">Wikipedia</a>
-                                    </li>
-                                </ul>
-                                
-                                <div class="tab-content ml-1" id="myTabContent">
-                                    <div class="tab-pane fade show active" id="basicInfo" role="tabpanel" aria-labelledby="basicInfo-tab">
-                                        <div class="row">
-                                            <div class="col-sm-3 col-md-2 col-5">
-                                                <label style="font-weight:bold;">Nom</label>
-                                            </div>
-                                            <div class="col-md-8 col-6">
-                                                {{ post.name}}
-                                            </div>
-                                        </div>
-                                        <hr />
-
-                                        <div class="row">
-                                            <div class="col-sm-3 col-md-2 col-5">
-                                                <label style="font-weight:bold;">Description</label>
-                                            </div>
-                                            <div class="col-md-8 col-6">
-                                                {{ post.description }}
-                                            </div>
-                                        </div>
-                                        <hr />
-
-                                        <div class="row">
-                                            <div class="col-sm-3 col-md-2 col-5">
-                                                <label style="font-weight:bold;">Photo principale</label>
-                                            </div>
-                                            <div class="col-md-8 col-6">
-                                                {{ post.photo }}
-                                            </div>
-                                        </div>
-                                        <hr />
-                                        
-                                        
-                                       
-                                        {# photos pour un seul trick #}
-                                        <div class="row">
-                                            <div class="col-sm-3 col-md-2 col-5">
-                                                <label style="font-weight:bold;">Photos du trick</label>
-                                            </div>
-                                            <div class="col-md-8 col-6">
-                                                {% for photo in post.photos %}
-                                                    {{ photo.name }} <br/>
-                                                {% endfor %}
-                                            </div>
-                                        </div>
-
-                                        <hr/>
-                                        <div class="row">
-                                            {# videos pour un seul trick #}
-                                            <div class="col-sm-3 col-md-2 col-5">
-                                                <label style="font-weight:bold;">Videos du trick</label>
-                                            </div>
-                                            <div class="col-md-8 col-6">
-                                                {% for video in post.videos %}
-                                                    <a href="{{ video.name }}">{{ video.name }}</a> <br/>
-                                                {% endfor %}
-                                            </div>
-                                        </div>
-                                       
-
-                                        <div class="row">
-                                            <div class="col-sm-3 col-md-2 col-5">
-                                                <label style="font-weight:bold;">Date de publication</label>
-                                            </div>
-                                            <div class="col-md-8 col-6">
-                                                {{ post.date ? post.date|date('Y-m-d H:i:s') : '' }}
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="tab-pane fade" id="connectedServices" role="tabpanel" aria-labelledby="ConnectedServices-tab">
-                                       <a href="https://fr.wikipedia.org/wiki/Snowboard_freestyle#Les_types_de_tricks">Lien vers les tricks</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><strong><a class="post-title" href="#">Post Title</a></strong></div>
+                        <div class="panel-body">
+                            <div class="col-md-6">
+                                <a href="#" class="thumbnail"><img src="{{ asset('uploads/photos/' ~ post.photo) }}" id="main-image" alt=""></a>
+                            </div>     
+                            <p>{{ post.description }}</p>                           
+                        </div>                  
+                    <div class="panel-footer">
+                        <span class="glyphicon glyphicon-user" id="start"></span> <label id="started">By</label> <a href="#" id="startedby">{{ post.user }}</a> | 
+                        <span class="glyphicon glyphicon-eye-open" id="visit"></span> <a href="#" id="visited">{{ post.date }}</a> | 
                     </div>
                 </div>
             </div>

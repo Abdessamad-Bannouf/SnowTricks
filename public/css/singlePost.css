@@ -3,18 +3,46 @@ img {
     width: 200px;
 }
 
-iframe {
-    width: 200px;
+#main-image {
+    height: 500px;
+    width: 950px;
 }
 
-.photo {
-    margin-right: 0.1%;
+#start {
+    font-size: 1em;
 }
 
-.crud-button {
-    display: inline;
+#started {
+    font-size: 1em;
 }
 
-.container {
-    margin-top: 100px;
+#startedby {
+    font-size: 1.2em;
+}
+
+#visited {
+    font-size: 1.2em;
+}
+
+#visit {
+    font-size: 1em;
+}
+
+#comments {
+    font-size: 1.2em;
+}
+
+#comment {
+    font-size: 1em;
+}
+
+.post-title {
+    font-size: 1.5em;
+    text-decoration: none;
+    color: #990099;
+}
+
+.post-title:hover {
+    text-decoration: none;
+    color: #990099;
 }
