@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Photo;
 use App\Form\PhotoType;
+use App\Form\UpdatePhotoType;
 use App\Repository\PhotoRepository;
 use App\Repository\PostRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -69,12 +70,12 @@ class PhotoController extends AbstractController
      */
     public function edit(Request $request, Photo $photo, PostRepository $postRepository): Response
     {
-        $form = $this->createForm(PhotoType::class, $photo);
+        $form = $this->createForm(UpdatePhotoType::class, $photo);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             // On récupère l'image principale qui va servir pour la page pour afficher la liste
-            $postPhoto = $form->get('photo')->getData();
+            $postPhoto = $form->get('file')->getData();
             $image = new File($postPhoto);
             $fichier = md5(uniqid()) . '.' . $image->guessExtension();
 
