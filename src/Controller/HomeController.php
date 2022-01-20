@@ -14,6 +14,7 @@ class HomeController extends AbstractController
      */
     public function index(): Response
     {
+        $this->addFlash('success', 'Article Created! Knowledge is power!');
         $repository = $this->getDoctrine()->getRepository(Post::class);
         $posts = $repository->findAll();
         return $this->render('home/index.html.twig', [

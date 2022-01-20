@@ -10,6 +10,8 @@ use App\Form\RegistrationType;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -23,6 +25,11 @@ class SecurityController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         if ($this->getUser()) {
+            // Si l'utilisateur est connecté, il y a un message flash pour le login
+            $this->addFlash(
+                'succes-login',
+                'Vous êtes connectés !'
+            );
             return $this->redirectToRoute('home');
         }
 
@@ -45,7 +52,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/inscription", name="security_registration")
      */
-    public function registration(Request $request, EntityManagerInterface $manager, UserPasswordHasherInterface $hash, EventDispatcherInterface $dispatcher){
+    public function registration(Request $request, EntityManagerInterface $manager, UserPasswordHasherInterface $hash, EventDispatcherInterface $dispatcher, MailerInterface $mailer){
         $user = new User;
 
         $form = $this->createForm(RegistrationType::class, $user);
@@ -60,12 +67,35 @@ class SecurityController extends AbstractController
             $manager->persist($user);
             $manager->flush();
 
+            $email = (new Email())
+            ->from('hello@snow-trick.com')
+            ->to('abdessamad.bannouf@laposte.net')
+            //->cc('cc@example.com')
+            //->bcc('bcc@example.com')
+            //->replyTo('fabien@example.com')
+            //->priority(Email::PRIORITY_HIGH)
+            ->subject('Votre inscription sur Snow Trick!')
+            ->text('Votre inscription sur Snow Tricks
+            
+Vous venez de créer votre compte sur le meilleur site communautaire de Snow Board avec le mail '.$user->getEmail().', et nous vous en en remercions cher(e) '.$user->getUsername().' !
+                    
+Snow Tricks - Blog')
+            ->html('Votre inscription sur Snow Tricks<br/><br>Vous venez de créer votre compte sur le meilleur site communautaire de Snow Board avec le mail '.$user->getEmail().', et nous vous en en remercions cher(e) '.$user->getUsername().' !<br/><br/>Snow Tricks - Blog');
+
+        $mailer->send($email);
+
             // Redirect after registration
             $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
             $this->get("security.token_storage")->setToken($token);
 
             $event = new SecurityEvents($request);
             $dispatcher->dispatch($event, SecurityEvents::INTERACTIVE_LOGIN);
+
+            // Si l'inscription s'est bien passée, il y a un message flash pour l'inscription
+            $this->addFlash(
+                'succes-registration',
+                'Inscription finalisée, ne venons de vous envoyer un mail pour vous confirmer l\'inscription'
+            );
 
             return $this->redirectToRoute('home');
         }

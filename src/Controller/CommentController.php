@@ -54,7 +54,10 @@ class CommentController extends AbstractController
             $entityManager->persist($comment);
             $entityManager->flush();
 
-            return $this->redirectToRoute('comment_index', [], Response::HTTP_SEE_OTHER);
+            $getPostWithComment  = $postRepository->findBy(['id' => $comment->getPost()]);
+            $slug = $getPostWithComment[0]->getSlug();
+
+            return $this->redirectToRoute('post_show', ['slug' => $slug], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('comment/new.html.twig', [
@@ -76,7 +79,7 @@ class CommentController extends AbstractController
     /**
      * @Route("/{id}/edit", name="comment_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Comment $comment): Response
+    public function edit(Request $request, Comment $comment, PostRepository $postRepository): Response
     {
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
@@ -84,7 +87,10 @@ class CommentController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('comment_index', [], Response::HTTP_SEE_OTHER);
+            $getPostWithComment  = $postRepository->findBy(['id' => $comment->getPost()]);
+            $slug = $getPostWithComment[0]->getSlug();
+
+            return $this->redirectToRoute('post_show', ['slug' => $slug], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('comment/edit.html.twig', [
@@ -96,7 +102,7 @@ class CommentController extends AbstractController
     /**
      * @Route("/{id}", name="comment_delete", methods={"POST"})
      */
-    public function delete(Request $request, Comment $comment): Response
+    public function delete(Request $request, Comment $comment, PostRepository $postRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$comment->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
@@ -104,6 +110,9 @@ class CommentController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('comment_index', [], Response::HTTP_SEE_OTHER);
+        $getPostWithComment  = $postRepository->findBy(['id' => $comment->getPost()]);
+        $slug = $getPostWithComment[0]->getSlug();
+
+        return $this->redirectToRoute('post_show', ['slug' => $slug], Response::HTTP_SEE_OTHER);
     }
 }
