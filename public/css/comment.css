@@ -133,3 +133,29 @@
   form, .form-group, #comment_Envoyer {
     margin-top: 20px !important;
 } 
+
+
+/* Comments */
+.form-comment-content {
+  width: 50%;
+}
+
+.form-comment-content .form-group {
+  display: flex;
+}
+
+#comment_Envoyer {
+  background-color: #4CAF50;
+}
+
+
+form .form-comment-content, .form-group {
+  position: absolute;
+  bottom: 0px;
+  right: 900px;
+  margin-bottom: 0rem !important;
+}
+
+#comment_Envoyer {
+  margin-bottom: 0rem;
+}
