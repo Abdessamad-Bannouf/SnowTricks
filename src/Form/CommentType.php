@@ -20,7 +20,9 @@ class CommentType extends AbstractType
             ->add('postId', HiddenType::class, [
                 'mapped' => 'false'
             ])
-            ->add('Envoyer', SubmitType::class)
+            ->add('Envoyer', SubmitType::class, [
+                'attr' => ['class' => 'save-comment']
+            ])
         ;
     }
 
