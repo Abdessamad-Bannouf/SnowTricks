@@ -174,7 +174,7 @@ class PostController extends AbstractController
             $form = $this->createForm(CommentType::class, $comment);
             $form->handleRequest($request);
 
-            $limitComments = 10;
+            $limitComments = 5;
             $totalComments = count($commentRepository->findBy(['post' => $post], ['date' => 'desc']));
 
             $photos = $photoRepository->findBy(['post' => $post]);

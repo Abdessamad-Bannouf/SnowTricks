@@ -15,133 +15,62 @@
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="/js/post.js"></script>
 {% endblock %}
 
 {% block body %}
     {# Affichage du post (trick) #}
     <div class="container">
-        <h1>Post</h1>
+        <h1>{{ post.name }}</h1>
         <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title mb-4">
-                            <div class="d-flex justify-content-start">
-                                <div class="image-container">
-                                    <img src="{{ asset('uploads/photos/' ~ post.photo) }}" id="imgProfile" style="width: 150px; height: 150px" class="img-thumbnail" />
-                                </div>
-                                <div class="userData ml-3">
-                                    <h2 class="d-block" style="font-size: 1.5rem; font-weight: bold"><a href="javascript:void(0);">Figure numéro {{ post.id }}</a></h2>
-                                </div>
-                                <div class="ml-auto">
-                                    <input type="button" class="btn btn-primary d-none" id="btnDiscard" value="Discard Changes" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-12">
-                                <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" id="basicInfo-tab" data-toggle="tab" href="#basicInfo" role="tab" aria-controls="basicInfo" aria-selected="true">Information</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="connectedServices-tab" data-toggle="tab" href="#connectedServices" role="tab" aria-controls="connectedServices" aria-selected="false">Wikipedia</a>
-                                    </li>
-                                </ul>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="img-container">
+                            <div class="post-icon">
                                 
-                                <div class="tab-content ml-1" id="myTabContent">
-                                    <div class="tab-pane fade show active" id="basicInfo" role="tabpanel" aria-labelledby="basicInfo-tab">
-                                        <div class="row">
-                                            <div class="col-sm-3 col-md-2 col-5">
-                                                <label style="font-weight:bold;">Nom</label>
-                                            </div>
-                                            <div class="col-md-8 col-6">
-                                                {{ post.name}}
-                                            </div>
-                                        </div>
-                                        <hr />
-
-                                        <div class="row">
-                                            <div class="col-sm-3 col-md-2 col-5">
-                                                <label style="font-weight:bold;">Description</label>
-                                            </div>
-                                            <div class="col-md-8 col-6">
-                                                {{ post.description }}
-                                            </div>
-                                        </div>
-                                        <hr />
-
-                                        <div class="row">
-                                            <div class="col-sm-3 col-md-2 col-5">
-                                                <label style="font-weight:bold;">Photo principale</label>
-                                            </div>
-                                            <div class="col-md-8 col-6">
-                                                {{ post.photo }}
-                                            </div>
-                                        </div>
-                                        <hr />
-                                        
-                                        
-                                       
-                                        {# photos pour un seul trick #}
-                                        <div class="row">
-                                            <div class="col-sm-3 col-md-2 col-5">
-                                                <label style="font-weight:bold;">Photos du trick</label>
-                                            </div>
-                                            <div class="col-md-8 col-6">
-                                                {% for photo in post.photos %}
-                                                    {{ photo.name }} <br/>
-                                                {% endfor %}
-                                            </div>
-                                        </div>
-
-                                        <hr/>
-                                        <div class="row">
-                                            {# videos pour un seul trick #}
-                                            <div class="col-sm-3 col-md-2 col-5">
-                                                <label style="font-weight:bold;">Videos du trick</label>
-                                            </div>
-                                            <div class="col-md-8 col-6">
-                                                {% for video in post.videos %}
-                                                    <a href="{{ video.name }}">{{ video.name }}</a> <br/>
-                                                {% endfor %}
-                                            </div>
-                                        </div>
-                                       
-
-                                        <div class="row">
-                                            <div class="col-sm-3 col-md-2 col-5">
-                                                <label style="font-weight:bold;">Date de publication</label>
-                                            </div>
-                                            <div class="col-md-8 col-6">
-                                                {{ post.date ? post.date|date('Y-m-d H:i:s') : '' }}
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="tab-pane fade" id="connectedServices" role="tabpanel" aria-labelledby="ConnectedServices-tab">
-                                       <a href="https://fr.wikipedia.org/wiki/Snowboard_freestyle#Les_types_de_tricks">Lien vers les tricks</a>
-                                    </div>
-                                </div>
+                                <form class="trash-icon" method="post" action="{{ path('post_delete', {'slug': post.slug}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                    <p class="delete-icon">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ post.slug) }}">
+                                        <button class="btn btn-trash">
+                                            <span>
+                                                <i class="fa fa-trash"></i>
+                                            </span>
+                                        </button>
+                                    </p>
+                                </form>
+                                <p class="update-icon">
+                                    <span><a href="{{ path('post_edit', {'slug':post.slug}) }}"><i class="fa fa-pencil"></i></a></span>
+                                </p>
                             </div>
-                        </div>
+                            
+                            
+                            
+                            <img class="main-image" src="{{ asset('uploads/photos/' ~ post.photo) }}" id="main-image" alt="">
+                        </div>     
+                        <p class="post-description">{{ post.description }}</p>   
+
+                    </div>    
+
+                    <div class="panel-footer">
+                            <!--<span class="glyphicon glyphicon-user" id="start"></span> <label id="started">By</label> <a href="#" id="startedby">Admin</a> |!--> 
+                            <span class="glyphicon glyphicon-eye-open" id="visit"> {{ post.date ? post.date|date('Y-m-d H:i:s') : '' }}</span> | 
+                            <span class="glyphicon glyphicon-comment" id="comment">{{ post.group.name }}</span> | 
+                            <!--<a href="#"><span class="label label-info">Tutorials</span></a>!-->
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="d-flex container">
+    <div class="container-media">
 
         {# Affichage des photos #}
-        <div class="row">
-            {% for photo in photos %}
-                <div class="col-md-4 col-sm-12 mb-3">
-                    <img src="{{ asset('uploads/photos/' ~ photo.name) }}" />
-                    <form method="post" action="{{ path('photo_delete', {'id': photo.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+        {% for photo in photos %}
+                <img class="images-post" src="{{ asset('uploads/photos/' ~ photo.name) }}" />
+                <form method="post" action="{{ path('photo_delete', {'id': photo.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ photo.id) }}">
-                    <div class="crud-button" style="">
+                    <div class="crud-icon">
                         <button class="btn">
                             <span>
                                 <i class="fa fa-trash">
@@ -151,46 +80,42 @@
                         <span class="btn">
                             <a href="{{ path('photo_edit', {'id': photo.id}) }}"><i class="fa fa-pencil"></a></i> 
                         </span>
-                    </form>
-
-                    
-                     
                     </div>
-                </div>
-            {% endfor %} 
-        </div>
+                </form>
+        {% endfor %} 
        
 
         {# Affichage des videos #}
-        <div class="ml-5 row">
-            {% for video in videos %}
-            <div class="col-md-4 col-sm-12 mb-3">   
-                <iframe src="{{ video.name }}" width="420" height="113"></iframe>
-                <form method="post" action="{{ path('video_delete', {'id': video.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
-                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ video.id) }}">
-                    <div class="crud-button" style="">
-                        <button class="btn">
-                            <span>
-                                <i class="fa fa-trash">
-                                </i>
-                            </span>
-                        </button>
-                        <span class="btn">
-                            <a href="{{ path('video_edit', {'id': video.id}) }}"><i class="fa fa-pencil"></a></i> 
+        {% for video in videos %}  
+            <iframe class="videos-post" src="{{ video.name }}"></iframe>
+            <form method="post" action="{{ path('video_delete', {'id': video.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ video.id) }}">
+                <div class="crud-icon">
+                    <button class="btn">
+                        <span>
+                            <i class="fa fa-trash">
+                            </i>
                         </span>
-                    </div>
-                </form>
-            </div> 
+                    </button>
+                    <span class="btn">
+                        <a href="{{ path('video_edit', {'id': video.id}) }}"><i class="fa fa-pencil"></a></i> 
+                    </span>
+                </div>
+            </form>
+        {% endfor %}
+    </div>
 
-            {% endfor %}
-        </div>
-      
-
+    <div>
+        <button class="btn-load-media" onclick="seeMore()">
+                See media
+        </button>
     </div>
 
     {# Formulaire pour le commentaire #}
     {{ form_start(form, {'action': path('comment_new')}) }}
-    {{ form_widget(form.content ) }}
+    <div class="form-comment-content">
+        {{ form_widget(form.content) }}
+    </div>
     {{ form_widget(form.postId, {'value' : post.id} ) }}
     {{ form_end(form) }}
 
@@ -206,7 +131,7 @@
                             </div>
                             <div class="float-left meta">
                                 <div class="title h5">
-                                    <a href="#"><b>{{ app.user.username }}</b></a>
+                                    <b>{{ app.user.username }}</b>
                                     a publié un commentaire.
                                 </div>
                                 <h6 class="text-muted time">{{ post.date ? post.date|date('Y-m-d H:i:s') : '' }}</h6>
@@ -224,10 +149,6 @@
             </div>
         </div> 
     {% endfor %}
-
-    <a href="{{ path('post_edit', {'slug': post.slug}) }}">edit</a>
-
-    {{ include('post/_delete_form.html.twig') }}
 
     
     {# On crée une boucle qui va de 0 au nombre de pages (total commentaires /limit commentaires) #}
