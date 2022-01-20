@@ -118,6 +118,22 @@ nav ul li a {
   color: #fff;
 }
 
+.arrow_down{ 
+  position: absolute;
+  bottom: 0px;
+  right: 50px;
+  font-size: 40px;
+}
+
+.fa-eye {
+  font-size: 40px;
+  color:white
+}
+
+.row {
+  display: none;
+}
+
 @media(max-width: 786px) {
 
   .logo {
