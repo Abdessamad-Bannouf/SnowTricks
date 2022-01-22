@@ -23,7 +23,7 @@
     <div class="container">
         <h1>{{ post.name }}</h1>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-12">
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <div class="img-container">
@@ -40,7 +40,11 @@
                                     </p>
                                 </form>
                                 <p class="update-icon">
-                                    <span><a href="{{ path('post_edit', {'slug':post.slug}) }}"><i class="fa fa-pencil"></i></a></span>
+                                    <span>
+                                        <a href="{{ path('post_edit', {'slug':post.slug}) }}">
+                                            <i class="fa fa-pencil">
+                                        </i></a>
+                                    </span>
                                 </p>
                             </div>
                             

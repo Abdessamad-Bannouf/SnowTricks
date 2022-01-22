@@ -27,10 +27,13 @@ class AppFixtures extends Fixture
         // $product = new Product();
         // $manager->persist($product);
 
+        /* Initialisation des variables */
         $photos = ['0a7b1ecf90592b788056139693f9b6fd.jpg', '0d4c0b95976825b2d96a122ff5a84aee.jpg', '3b41dd3c3e4325e08240833f19373804.jpg', 'fc33e221682ea8da7a57d9a507882fad.jpg', 'fbe0c8b13872e2b86b4dd5d0b7f6281c.jpg'];
         $videos = ["https://www.youtube.com/embed/Opg5g4zsiGY", "https://www.youtube.com/embed/POoRimej898", "https://www.youtube.com/embed/ghwZvrJi2fg", "https://www.youtube.com/embed/CzDjM7h_Fwo", "https://www.youtube.com/embed/CzDjM7h_Fwo"];
         $humanType = ['male', 'female'];
+        $users = array();
 
+        // Création de la langue des fixtures (fr)
         $faker = Factory::create('fr_FR');
 
         // Créer les différents sluggers
@@ -49,7 +52,9 @@ class AppFixtures extends Fixture
                 ->setPhoto('https://randomuser.me/api/portraits/' . ($getHumanType == 'male' ? 'men/' : 'women/') . $faker->numberBetween(1,60) . '.jpg')
                 ->setRoles('ROLE_USER');
 
-                $manager->persist($user);
+            array_push($users, $user);
+
+            $manager->persist($user);
         }
 
         //Créer 3 groupes de sky
@@ -60,7 +65,7 @@ class AppFixtures extends Fixture
 
             $manager->persist($group);
 
-            // Créer entre 4 et 6 figures
+            // Créer entre 4 et 6 figures pour chaque groupe
             for($j=1; $j<=mt_rand(4,6); $j++){
                 $post = new Post;
                 $description = join($faker->paragraphs(1));
@@ -69,11 +74,12 @@ class AppFixtures extends Fixture
                 ->setPhoto($photos[mt_rand(0,4)])
                 ->setDate($faker->dateTimeBetween('2021-01-01', 'now'))
                 ->setSlug($slugger->slug($post->getName()))
-                ->setGroup($group);
+                ->setGroup($group)
+                ->setUser($users[mt_rand(0, count($users)-1)]);
 
                 $manager->persist($post);
 
-                // Créer 3 photos
+                // Créer 3 photos pour chaque trick-
                 for($k=1; $k<=3; $k++){
                     $photo = new Photo;
                     $photo->setName($photos[mt_rand(0,4)])
@@ -84,7 +90,7 @@ class AppFixtures extends Fixture
 
                 
 
-                    // Créer 3 vidéos
+                    // Créer 3 vidéos pour chaque trick
                     for($l=1; $l<=3; $l++){
                         $video = new Video;
                         $video->setName($videos[mt_rand(0,4)])
@@ -95,7 +101,7 @@ class AppFixtures extends Fixture
 
                     
 
-                    // Créer entre 4 et 10 commentaires
+                    // Créer entre 4 et 10 commentaires pour chaque trick
                     for($m=1; $m<=mt_rand(4,10); $m++){
                         $comment = new Comment;
                         $content = join($faker->paragraphs(5));
