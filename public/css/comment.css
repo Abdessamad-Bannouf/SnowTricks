@@ -133,6 +133,13 @@
 form {
   display: flex;
 }
+
+.btn-load-media {
+  margin-bottom: 30px;
+  margin-left: 20%;
+  background-color: bisque;
+}
+
 /* Comments */
 .form-comment-content {
   width: 50%;
@@ -141,14 +148,22 @@ form {
 
 
 #comment_Envoyer {
-  background-color: #4CAF50;
+  background-color:mistyrose;
 }
 
-form .form-comment-content, .form-group {
+#comment-form .form-comment-content, .form-group {
   margin-left: 30px;
   margin-bottom: 0rem !important;
 }
 
+#comment-form {
+  margin-left: 30%;
+}
+
 #comment_Envoyer {
   margin-bottom: 0rem;
+}
+
+.comments-all {
+  margin-left: 20%;
 }
