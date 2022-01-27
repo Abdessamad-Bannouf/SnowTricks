@@ -78,16 +78,10 @@
             <h1>Snow Tricks</h1>
             <h2>Le site communautaire pour en apprendre plus sur le snow</h2>
         </div>
-        <p class="arrow_down"><span><a href="#tricks"><i class="fa fa-arrow-down"></i></a></span></p>
+        <p class="arrow_down" onclick="scrollDownPosts(900);"><span><i class="fa fa-arrow-down"></i></span></p>
     </section>
     
         <section id="tricks">
-            <div>
-                <span class="container-media" onclick="seeMorePosts()">
-                    <i class="fa fa-eye"></i>
-                </span>
-            </div>
-            
             <div class="container mx-auto mt-4">
                 <div class="row">
                 {% for post in posts %}
@@ -125,6 +119,7 @@
                 {% endfor %}   
                 </div>
             </div>
+            <p class="arrow_up" onclick="scrollUpPosts(0);"><span><i class="fa fa-arrow-up"></i></span></p>
         </section>
    
 
