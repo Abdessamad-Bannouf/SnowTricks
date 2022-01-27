@@ -125,14 +125,17 @@ nav ul li a {
   font-size: 40px;
 }
 
-.fa-eye {
-  font-size: 40px;
-  color:white
+#tricks {
+  position: relative;
 }
 
-.row {
-  display: none;
+.arrow_up { 
+  position: absolute;
+  bottom: 0px;
+  right: 50px;
+  font-size: 40px;
 }
+
 
 @media(max-width: 786px) {
 
