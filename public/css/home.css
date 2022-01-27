@@ -118,6 +118,25 @@ nav ul li a {
   color: #fff;
 }
 
+.arrow_down{ 
+  position: absolute;
+  bottom: 0px;
+  right: 50px;
+  font-size: 40px;
+}
+
+#tricks {
+  position: relative;
+}
+
+.arrow_up { 
+  position: absolute;
+  bottom: 0px;
+  right: 50px;
+  font-size: 40px;
+}
+
+
 @media(max-width: 786px) {
 
   .logo {
