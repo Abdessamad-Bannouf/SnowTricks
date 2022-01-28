@@ -65,15 +65,34 @@
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="container-media">
+        <div class="container-media">
 
-        {# Affichage des photos #}
-        {% for photo in photos %}
-                <img class="images-post" src="{{ asset('uploads/photos/' ~ photo.name) }}" />
-                <form method="post" action="{{ path('photo_delete', {'id': photo.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
-                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ photo.id) }}">
+            {# Affichage des photos #}
+            {% for photo in photos %}
+                    <img class="images-post" src="{{ asset('uploads/photos/' ~ photo.name) }}" />
+                    <form method="post" action="{{ path('photo_delete', {'id': photo.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ photo.id) }}">
+                        <div class="crud-icon">
+                            <button class="btn">
+                                <span>
+                                    <i class="fa fa-trash">
+                                    </i>
+                                </span>
+                            </button>
+                            <span class="btn">
+                                <a href="{{ path('photo_edit', {'id': photo.id}) }}"><i class="fa fa-pencil"></a></i> 
+                            </span>
+                        </div>
+                    </form>
+            {% endfor %} 
+        
+
+            {# Affichage des videos #}
+            {% for video in videos %}  
+                <iframe class="videos-post" src="{{ video.name }}"></iframe>
+                <form method="post" action="{{ path('video_delete', {'id': video.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ video.id) }}">
                     <div class="crud-icon">
                         <button class="btn">
                             <span>
@@ -82,34 +101,15 @@
                             </span>
                         </button>
                         <span class="btn">
-                            <a href="{{ path('photo_edit', {'id': photo.id}) }}"><i class="fa fa-pencil"></a></i> 
+                            <a href="{{ path('video_edit', {'id': video.id}) }}"><i class="fa fa-pencil"></a></i> 
                         </span>
                     </div>
                 </form>
-        {% endfor %} 
-       
+            {% endfor %}
 
-        {# Affichage des videos #}
-        {% for video in videos %}  
-            <iframe class="videos-post" src="{{ video.name }}"></iframe>
-            <form method="post" action="{{ path('video_delete', {'id': video.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
-                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ video.id) }}">
-                <div class="crud-icon">
-                    <button class="btn">
-                        <span>
-                            <i class="fa fa-trash">
-                            </i>
-                        </span>
-                    </button>
-                    <span class="btn">
-                        <a href="{{ path('video_edit', {'id': video.id}) }}"><i class="fa fa-pencil"></a></i> 
-                    </span>
-                </div>
-            </form>
-        {% endfor %}
-    </div>
+        </div>
 
-    <div>
+        <div>
         <button class="btn-load-media" onclick="seeMore()">
                 See media
         </button>
@@ -129,7 +129,7 @@
         {% for comment in comments %}
             <div class="container">
                 <div class="row">
-                    <div class="col-8">
+                    <div class="col-12">
                         <div class="card card-white post">
                             <div class="post-heading">
                                 <div class="float-left image">
@@ -173,4 +173,6 @@
             {# endif #}
             {% endif %}
     {% endfor %}
+    </div>
+
 {% endblock %}

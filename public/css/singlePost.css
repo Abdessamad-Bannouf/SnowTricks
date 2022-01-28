@@ -84,7 +84,6 @@ form {
 
 .container-media { 
     display: flex;
-    justify-content: center;
     flex-wrap: wrap;
     padding: 10px;
 }
@@ -112,10 +111,10 @@ form {
 }
 
 .btn-load-media {
-    background-color:bisque;
-    margin-top: 30px;
-    margin-left: 400px;
     display: none;
+    margin-left: 40%;
+    margin: 0 auto;
+    width: 100px;
 }
 
 @media screen and (max-width: 1000px) {
@@ -142,11 +141,8 @@ form {
     .container-media {
         display: none;
     }
-
+    
     .btn-load-media {
-        display: inline;
-        margin-left: 40%;
+        display: block;
     }
-
-   
 }
