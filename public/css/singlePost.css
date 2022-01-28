@@ -47,39 +47,43 @@ img {
 /* main img */
 .img-container {
     position: relative;
+    width: 100%;
+    max-width: 950px;
+    height: auto;
 }
 
 /* icon for main img post */
 .post-icon {
     display: flex;
     position: absolute;
-    left: 850px;
-    top: 20px;
+    right: 0px;
+    top: 0px;
 }
 
-.update-icon {
-    margin-top: 25px;
+.fa-pencil {
+    top: 15px;
 }
 
 /* Medias (vidéos, photos) */
 form {
     position: relative;
+    display: flex;
 }
 
-.delete-icon, .update-icon {
-    display: inline;
+.update-icon {
+    padding-top: 7px;
+    margin-left: 10px;
 }
 
 .crud-icon {
     display: flex;
     position: absolute;
-    top: 80px;
-    right: 40px;
+    top: 110px;
+    right: 65px;
 }
 
 .container-media { 
     display: flex;
-    justify-content: center;
     flex-wrap: wrap;
     padding: 10px;
 }
@@ -107,10 +111,10 @@ form {
 }
 
 .btn-load-media {
-    background-color: #008CBA;
-    margin-top: 30px;
-    margin-left: 400px;
     display: none;
+    margin-left: 40%;
+    margin: 0 auto;
+    width: 100px;
 }
 
 @media screen and (max-width: 1000px) {
@@ -123,22 +127,22 @@ form {
     .post-icon {
         display: flex;
         position: absolute;
-        left: 500px;
-        top: 20px;
+        right: 0px;
+        top: 0px;
     }
+
+    .img-container {
+        width: 100%;
+    }
+    
 }
 
 @media screen and (max-width: 1250px) {
     .container-media {
         display: none;
     }
-
+    
     .btn-load-media {
-        display: inline;
-        margin-left: 40%;
-    }
-
-    .crud-icon {
-        bottom: 300px;
+        display: block;
     }
 }

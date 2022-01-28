@@ -22,6 +22,8 @@ class Photo
      */
     private $name;
 
+    private $file;
+
     /**
      * @ORM\ManyToOne(targetEntity=Post::class, inversedBy="photos")
      * @ORM\JoinColumn(nullable=false)
