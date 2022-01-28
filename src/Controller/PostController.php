@@ -107,6 +107,9 @@ class PostController extends AbstractController
                 $slugger = new AsciiSlugger('fr', ['fr' => [' ' => '-', 'à' => 'a', 'â' => 'a', 'é' => 'e', 'è' => 'e', 'ê' => 'e', 'î' => 'i', 'ï' => 'i', 'ô' => 'o', 'û' => 'u']]);
                 $post->setSlug($slugger->slug($post->getName()));
 
+                // On persiste le nom de l'utilisateur qui a ajouté le post (user connecté)
+                $post->setUser($this->getUser());
+
                 $entityManager = $this->getDoctrine()->getManager();
             
                 // On stocke l'image principale dans la base de données (son nom)
