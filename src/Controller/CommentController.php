@@ -18,20 +18,29 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class CommentController extends AbstractController
 {
+    private $commentRepository;
+    private $postRepository;
+
+    public function __construct(CommentRepository $commentRepository, PostRepository $postRepository)
+    {
+        $this->commentRepository = $commentRepository;
+        $this->postRepository = $postRepository;
+    }
+
     /**
      * @Route("/", name="comment_index", methods={"GET"})
      */
-    public function index(CommentRepository $commentRepository): Response
+    public function index(): Response
     {
         return $this->render('comment/index.html.twig', [
-            'comments' => $commentRepository->findAll(),
+            'comments' => $this->commentRepository->findAll(),
         ]);
     }
 
     /**
      * @Route("/new", name="comment_new", methods={"GET","POST"})
      */
-    public function new(Request $request, PostRepository $postRepository): Response
+    public function new(Request $request): Response
     {
         
         $comment = new Comment();
@@ -45,7 +54,7 @@ class CommentController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $postId = $form->get('postId')->getData();
             
-            $post = $postRepository->findBy(['id'=>$postId]);
+            $post = $this->postRepository->findBy(['id'=>$postId]);
             $comment->setContent($content);
             $comment->setPost($post[0]);
             $comment->setUser($this->getUser());
@@ -54,7 +63,7 @@ class CommentController extends AbstractController
             $entityManager->persist($comment);
             $entityManager->flush();
 
-            $getPostWithComment  = $postRepository->findBy(['id' => $comment->getPost()]);
+            $getPostWithComment  = $this->postRepository->findBy(['id' => $comment->getPost()]);
             $slug = $getPostWithComment[0]->getSlug();
 
             return $this->redirectToRoute('post_show', ['slug' => $slug], Response::HTTP_SEE_OTHER);
@@ -79,7 +88,7 @@ class CommentController extends AbstractController
     /**
      * @Route("/{id}/edit", name="comment_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Comment $comment, PostRepository $postRepository): Response
+    public function edit(Request $request, Comment $comment): Response
     {
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
@@ -87,7 +96,7 @@ class CommentController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            $getPostWithComment  = $postRepository->findBy(['id' => $comment->getPost()]);
+            $getPostWithComment  = $this->postRepository->findBy(['id' => $comment->getPost()]);
             $slug = $getPostWithComment[0]->getSlug();
 
             return $this->redirectToRoute('post_show', ['slug' => $slug], Response::HTTP_SEE_OTHER);
@@ -102,7 +111,7 @@ class CommentController extends AbstractController
     /**
      * @Route("/{id}", name="comment_delete", methods={"POST"})
      */
-    public function delete(Request $request, Comment $comment, PostRepository $postRepository): Response
+    public function delete(Request $request, Comment $comment): Response
     {
         if ($this->isCsrfTokenValid('delete'.$comment->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
@@ -110,7 +119,7 @@ class CommentController extends AbstractController
             $entityManager->flush();
         }
 
-        $getPostWithComment  = $postRepository->findBy(['id' => $comment->getPost()]);
+        $getPostWithComment  = $this->postRepository->findBy(['id' => $comment->getPost()]);
         $slug = $getPostWithComment[0]->getSlug();
 
         return $this->redirectToRoute('post_show', ['slug' => $slug], Response::HTTP_SEE_OTHER);
