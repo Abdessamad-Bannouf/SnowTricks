@@ -84,7 +84,7 @@ form {
 
 .container-media { 
     display: flex;
-    flex-wrap: wrap;
+    /*flex-wrap: wrap;*/
     padding: 10px;
 }
 
