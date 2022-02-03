@@ -25,14 +25,29 @@ use Symfony\Component\String\Slugger\AsciiSlugger;
  */
 class PostController extends AbstractController
 {
+    private $asciSlugger;
+    private $commentRepository;
+    private $photoRepository;
+    private $postRepository;
+    private $videoRepository;
+
+    public function __construct(CommentRepository $commentRepository, PhotoRepository $photoRepository, PostRepository $postRepository, VideoRepository $videoRepository)
+    {
+        $this->slugger = new AsciiSlugger('fr', ['fr' => [' ' => '-', 'à' => 'a', 'â' => 'a', 'é' => 'e', 'è' => 'e', 'ê' => 'e', 'î' => 'i', 'ï' => 'i', 'ô' => 'o', 'û' => 'u']]);
+        $this->commentRepository = $commentRepository;
+        $this->photoRepository = $photoRepository;
+        $this->postRepository = $postRepository;
+        $this->videoRepository = $videoRepository;
+    }
+
     /**
      * @Route("/", name="post_index", methods={"GET"})
      */
-    public function index(PostRepository $postRepository): Response
+    public function index(): Response
     {
         if($this->getUser()) { 
             return $this->render('post/index.html.twig', [
-                'posts' => $postRepository->findAll(),
+                'posts' => $this->postRepository->findAll(),
             ]);
         }
 
@@ -104,8 +119,7 @@ class PostController extends AbstractController
                 $date = $post->setDate($date);
 
                 //On persiste le nom sluggé dans la colonne slug
-                $slugger = new AsciiSlugger('fr', ['fr' => [' ' => '-', 'à' => 'a', 'â' => 'a', 'é' => 'e', 'è' => 'e', 'ê' => 'e', 'î' => 'i', 'ï' => 'i', 'ô' => 'o', 'û' => 'u']]);
-                $post->setSlug($slugger->slug($post->getName()));
+                $post->setSlug($this->slugger->slug($post->getName()));
 
                 // On persiste le nom de l'utilisateur qui a ajouté le post (user connecté)
                 $post->setUser($this->getUser());
@@ -138,7 +152,7 @@ class PostController extends AbstractController
     /**
      * @Route("/{slug}/edit", name="post_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Post $post): Response
+    public function edit(Post $post, Request $request): Response
     {
         // Si l'utilisateur est connecté il peut modifier un trick
         if($this->getUser()) {
@@ -146,8 +160,7 @@ class PostController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $slugger = new AsciiSlugger('fr', ['fr' => [' ' => '-', 'à' => 'a', 'â' => 'a', 'é' => 'e', 'è' => 'e', 'ê' => 'e', 'î' => 'i', 'ï' => 'i', 'ô' => 'o', 'û' => 'u']]);
-                $post->setSlug($slugger->slug($post->getName()));
+                $post->setSlug($this->slugger->slug($post->getName()));
 
                 $this->getDoctrine()->getManager()->flush();
 
@@ -169,7 +182,7 @@ class PostController extends AbstractController
      * @Route("/{slug}", name="post_show", methods={"GET"})
      * @Route("/{slug}/{page}", name="post_show_with_parameter_commentary", methods={"GET"})
      */
-    public function show($slug, $page = null, Post $post, PostRepository $postRepository, Request $request, PhotoRepository $photoRepository, VideoRepository $videoRepository, CommentRepository $commentRepository): Response
+    public function show(Post $post, $page = null, Request $request, $slug): Response
     {
         if($this->getUser()) {
             $comment = new Comment();
@@ -178,18 +191,18 @@ class PostController extends AbstractController
             $form->handleRequest($request);
 
             $limitComments = 5;
-            $totalComments = count($commentRepository->findBy(['post' => $post], ['date' => 'desc']));
+            $totalComments = count($this->commentRepository->findBy(['post' => $post], ['date' => 'desc']));
 
-            $photos = $photoRepository->findBy(['post' => $post]);
-            $videos = $videoRepository->findBy(['post' => $post]);
+            $photos = $this->photoRepository->findBy(['post' => $post]);
+            $videos = $this->videoRepository->findBy(['post' => $post]);
 
             (int) $pages = intval($totalComments / $limitComments);
             
             return $this->render('post/show.html.twig', [
-                'post' => $postRepository->findOneBy(['slug' => $slug]),
+                'post' => $this->postRepository->findOneBy(['slug' => $slug]),
                 'photos' => $photos,
                 'videos' => $videos,
-                'comments' => $commentRepository->findBy(['post' => $post], ['date' => 'desc'], $limitComments, $page * $limitComments),
+                'comments' => $this->commentRepository->findBy(['post' => $post], ['date' => 'desc'], $limitComments, $page * $limitComments),
                 'form' => $form->createView(),
                 'pages' => $pages,
             ]);
@@ -201,9 +214,9 @@ class PostController extends AbstractController
     /**
      * @Route("/{slug}", name="post_delete", methods={"POST"})
      */
-    public function delete(Request $request, Post $post): Response
+    public function delete(Post $post, Request $request): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$post->getSlug(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$post->getSlug(), $request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             
             $entityManager->remove($post);

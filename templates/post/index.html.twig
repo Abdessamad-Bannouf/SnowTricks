@@ -3,7 +3,7 @@
 {% block title %}Post index{% endblock %}
 
 {% block stylesheets %}
-    <link href="/css/editPost.css" rel="stylesheet">
+    <link href="/css/Post.css" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
@@ -44,7 +44,7 @@
             </tbody>
         </table>
         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-            <a href="{{ path('post_new') }}">Créer un trick</a>
+            <a href="{{ path('post_new') }}"><button class="btn btn-success">Créer un trick</button></a>
         {% endif %}
     </div>
 {% endblock %}
