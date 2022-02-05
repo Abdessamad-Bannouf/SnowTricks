@@ -12,6 +12,7 @@ use App\Repository\CommentRepository;
 use App\Repository\PhotoRepository;
 use App\Repository\PostRepository;
 use App\Repository\VideoRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -182,7 +183,7 @@ class PostController extends AbstractController
      * @Route("/{slug}", name="post_show", methods={"GET"})
      * @Route("/{slug}/{page}", name="post_show_with_parameter_commentary", methods={"GET"})
      */
-    public function show(Post $post, $page = null, Request $request, $slug): Response
+    public function show(PaginatorInterface $paginator, Post $post, $page = null, Request $request, $slug): Response
     {
         if($this->getUser()) {
             $comment = new Comment();
@@ -197,6 +198,15 @@ class PostController extends AbstractController
             $videos = $this->videoRepository->findBy(['post' => $post]);
 
             (int) $pages = intval($totalComments / $limitComments);
+
+            // Create Pagination
+            $data = $this->commentRepository->findBy(['post' => $post], ['date' => 'desc']);
+        
+            $comments = $paginator->paginate(
+                $data,
+                $request->query->getInt('page', 1),
+                5
+            );
             
             return $this->render('post/show.html.twig', [
                 'post' => $this->postRepository->findOneBy(['slug' => $slug]),
@@ -204,7 +214,7 @@ class PostController extends AbstractController
                 'videos' => $videos,
                 'comments' => $this->commentRepository->findBy(['post' => $post], ['date' => 'desc'], $limitComments, $page * $limitComments),
                 'form' => $form->createView(),
-                'pages' => $pages,
+                'comments' => $comments,
             ]);
         }
 
