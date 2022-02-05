@@ -42,7 +42,8 @@ class PostType extends AbstractType
                 'allow_delete' => true,
                 'by_reference' => false,
                 'prototype' => true,
-                'required' => false
+                'required' => false,
+                'label' => false,
             ])
             ->add('videos', CollectionType::class, [
                 'entry_type' => VideoType::class,
