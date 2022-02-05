@@ -117,7 +117,7 @@
     </div>
 
     {# Formulaire pour le commentaire #}
-    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
         {{ form_start(form, {'action': path('comment_new'), 'attr': {'id': 'comment-form'}}) }}
         <div class="form-comment-content">
             {{ form_widget(form.content) }}
