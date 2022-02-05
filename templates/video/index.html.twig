@@ -1,7 +1,9 @@
 {% extends 'base.html.twig' %}
+
 {% block stylesheets %}
     <link href="/css/crudVideo.css" rel="stylesheet">
 {% endblock %}
+
 {% block title %}Video index{% endblock %}
 
 {% block body %}
@@ -12,7 +14,7 @@
             <thead>
                 <tr>
                     <th>Id</th>
-                    <th>Name</th>
+                    <th>Nom</th>
                     <th>actions</th>
                 </tr>
             </thead>
@@ -22,18 +24,18 @@
                     <td>{{ video.id }}</td>
                     <td>{{ video.name }}</td>
                     <td>
-                        <a href="{{ path('video_show', {'id': video.id}) }}">show</a>
-                        <a href="{{ path('video_edit', {'id': video.id}) }}">edit</a>
+                        <a href="{{ path('video_show', {'id': video.id}) }}">Voir</a>
+                        <a href="{{ path('video_edit', {'id': video.id}) }}">Modifier</a>
                     </td>
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="3">no records found</td>
+                    <td colspan="3">Aucun resultat trouvé</td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
 
-        <a href="{{ path('video_new') }}">Create new</a>
+        <a href="{{ path('video_new') }}">Ajouter une nouvelle video</a>
     </div>
 {% endblock %}

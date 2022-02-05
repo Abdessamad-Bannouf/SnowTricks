@@ -59,7 +59,8 @@
                     <div class="panel-footer">
                             <!--<span class="glyphicon glyphicon-user" id="start"></span> <label id="started">By</label> <a href="#" id="startedby">Admin</a> |!--> 
                             <span class="glyphicon glyphicon-eye-open" id="visit"> {{ post.date ? post.date|date('Y-m-d H:i:s') : '' }}</span> | 
-                            <span class="glyphicon glyphicon-comment" id="comment">{{ post.group.name }}</span> | 
+                            <span class="glyphicon glyphicon-comment" id="comment">{{ post.group.name }}</span> |
+                            <span class="glyphicon glyphicon-comment" id="comment">{{ post.user.username }}</span>
                             <!--<a href="#"><span class="label label-info">Tutorials</span></a>!-->
                     </div>
                 </div>
@@ -111,7 +112,7 @@
 
         <div>
         <button class="btn-load-media" onclick="seeMore()">
-                See media
+            Regarder les médias
         </button>
     </div>
 
@@ -146,8 +147,8 @@
                             <div class="post-description"> 
                                 <p>{{ comment.content }}</p>
                                 {% if is_granted('ROLE_ADMIN') %}
-                                    <a href="{{ path('comment_show', {'id': comment.id}) }}">show</a>
-                                    <a href="{{ path('comment_edit', {'id': comment.id}) }}">edit</a>
+                                    <a href="{{ path('comment_show', {'id': comment.id}) }}">Voir</a>
+                                    <a href="{{ path('comment_edit', {'id': comment.id}) }}">Editer</a>
                                 {% endif %}
                             </div>
                         </div>
