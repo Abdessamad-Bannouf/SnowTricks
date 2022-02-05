@@ -159,7 +159,7 @@
 
     
     {# On crée une boucle qui va de 0 au nombre de pages (total commentaires /limit commentaires) #}
-    {% for i in 0 .. pages %}
+    {# for i in 0 .. pages }
         {% if pages == 0 %}
             <a href="{{ path('post_show_with_parameter_commentary', {'slug': post.slug, 'page': i}) }}">{{ i+1 }}</a>
         {% endif %}
@@ -171,8 +171,9 @@
             {# if (totalComments % limitComments > 0) and (i == (totalComments % limitComments) + 1) #}
                 <!--<a href="{# path('post_show_with_parameter_commentary', {'slug': post.slug, 'page': i + 1}) }}">{{ i + 1 #}</a>!-->
             {# endif #}
-            {% endif %}
-    {% endfor %}
+            {# endif #}
+    {# endfor #}
+        {{ knp_pagination_render(comments, 'base/pagination.html.twig') }}
     </div>
 
 {% endblock %}
