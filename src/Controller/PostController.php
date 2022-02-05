@@ -185,40 +185,36 @@ class PostController extends AbstractController
      */
     public function show(PaginatorInterface $paginator, Post $post, $page = null, Request $request, $slug): Response
     {
-        if($this->getUser()) {
-            $comment = new Comment();
-            
-            $form = $this->createForm(CommentType::class, $comment);
-            $form->handleRequest($request);
-
-            $limitComments = 5;
-            $totalComments = count($this->commentRepository->findBy(['post' => $post], ['date' => 'desc']));
-
-            $photos = $this->photoRepository->findBy(['post' => $post]);
-            $videos = $this->videoRepository->findBy(['post' => $post]);
-
-            (int) $pages = intval($totalComments / $limitComments);
-
-            // Create Pagination
-            $data = $this->commentRepository->findBy(['post' => $post], ['date' => 'desc']);
+        $comment = new Comment();
         
-            $comments = $paginator->paginate(
-                $data,
-                $request->query->getInt('page', 1),
-                5
-            );
-            
-            return $this->render('post/show.html.twig', [
-                'post' => $this->postRepository->findOneBy(['slug' => $slug]),
-                'photos' => $photos,
-                'videos' => $videos,
-                'comments' => $this->commentRepository->findBy(['post' => $post], ['date' => 'desc'], $limitComments, $page * $limitComments),
-                'form' => $form->createView(),
-                'comments' => $comments,
-            ]);
-        }
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
 
-        return $this->render('404/404.html.twig', []);
+        $limitComments = 5;
+        $totalComments = count($this->commentRepository->findBy(['post' => $post], ['date' => 'desc']));
+
+        $photos = $this->photoRepository->findBy(['post' => $post]);
+        $videos = $this->videoRepository->findBy(['post' => $post]);
+
+        (int) $pages = intval($totalComments / $limitComments);
+
+        // Create Pagination
+        $data = $this->commentRepository->findBy(['post' => $post], ['date' => 'desc']);
+    
+        $comments = $paginator->paginate(
+            $data,
+            $request->query->getInt('page', 1),
+            5
+        );
+        
+        return $this->render('post/show.html.twig', [
+            'post' => $this->postRepository->findOneBy(['slug' => $slug]),
+            'photos' => $photos,
+            'videos' => $videos,
+            'comments' => $this->commentRepository->findBy(['post' => $post], ['date' => 'desc'], $limitComments, $page * $limitComments),
+            'form' => $form->createView(),
+            'comments' => $comments,
+        ]);
     }
 
     /**
