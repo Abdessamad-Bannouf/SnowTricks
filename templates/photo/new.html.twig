@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Photo{% endblock %}
+{% block title %}Nouvelle Photo{% endblock %}
 
 {% block body %}
-    <h1>Create new Photo</h1>
+    <h1>Créer une nouvelle photo</h1>
 
     {{ include('photo/_form.html.twig') }}
 
-    <a href="{{ path('photo_index') }}">back to list</a>
+    <a href="{{ path('photo_index') }}">Revenir à la liste de photos</a>
 {% endblock %}

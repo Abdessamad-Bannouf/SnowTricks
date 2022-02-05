@@ -19,20 +19,29 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class PhotoController extends AbstractController
 {
+    private $photoRepository;
+    private $postRepository;
+
+    public function __construct(PhotoRepository $photoRepository, PostRepository $postRepository)
+    {
+        $this->photoRepository = $photoRepository;
+        $this->postRepository = $postRepository;
+    }
+
     /**
      * @Route("/", name="photo_index", methods={"GET"})
      */
-    public function index(PhotoRepository $photoRepository): Response
+    public function index(): Response
     {
         return $this->render('photo/index.html.twig', [
-            'photos' => $photoRepository->findAll(),
+            'photos' => $this->photoRepository->findAll(),
         ]);
     }
 
     /**
      * @Route("/new", name="photo_new", methods={"GET","POST"})
      */
-    public function new(Request $request, PostRepository $postRepository): Response
+    public function new(Request $request): Response
     {
         $photo = new Photo();
         $form = $this->createForm(PhotoType::class, $photo);
@@ -43,7 +52,7 @@ class PhotoController extends AbstractController
             $entityManager->persist($photo);
             $entityManager->flush();
 
-            $getPostWithPhoto  = $postRepository->findBy(['id' => $photo->getPost()]);
+            $getPostWithPhoto  = $this->postRepository->findBy(['id' => $photo->getPost()]);
             $slug = $getPostWithPhoto[0]->getSlug();
 
             return $this->redirectToRoute('post_show', ['slug' => $slug], Response::HTTP_SEE_OTHER);
@@ -68,7 +77,7 @@ class PhotoController extends AbstractController
     /**
      * @Route("/{id}/edit", name="photo_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Photo $photo, PostRepository $postRepository): Response
+    public function edit(Photo $photo, Request $request): Response
     {
         $form = $this->createForm(UpdatePhotoType::class, $photo);
         $form->handleRequest($request);
@@ -87,7 +96,7 @@ class PhotoController extends AbstractController
             $photo->setName($photo->getName());
             $this->getDoctrine()->getManager()->flush();
 
-            $getPostWithPhoto  = $postRepository->findBy(['id' => $photo->getPost()]);
+            $getPostWithPhoto  = $this->postRepository->findBy(['id' => $photo->getPost()]);
             $slug = $getPostWithPhoto[0]->getSlug();
 
             return $this->redirectToRoute('post_show', ['slug' => $slug], Response::HTTP_SEE_OTHER);
@@ -102,7 +111,7 @@ class PhotoController extends AbstractController
     /**
      * @Route("/{id}", name="photo_delete", methods={"POST"})
      */
-    public function delete(Request $request, Photo $photo, PostRepository $postRepository): Response
+    public function delete(Photo $photo, Request $request): Response
     {
         if ($this->isCsrfTokenValid('delete'.$photo->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
@@ -110,7 +119,7 @@ class PhotoController extends AbstractController
             $entityManager->flush();
         }
 
-        $getPostWithPhoto  = $postRepository->findBy(['id' => $photo->getPost()]);
+        $getPostWithPhoto  = $this->postRepository->findBy(['id' => $photo->getPost()]);
         $slug = $getPostWithPhoto[0]->getSlug();
 
         return $this->redirectToRoute('post_show', ['slug' => $slug], Response::HTTP_SEE_OTHER);

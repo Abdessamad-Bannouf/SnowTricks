@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Post{% endblock %}
+{% block title %}Nouvelle figure{% endblock %}
 
 {% block body %}
     <div class="container" style="margin-top: 100px">
-        <h1>Create new Post</h1>
+        <h1>Créer une nouvelle figure</h1>
 
         {{ include('post/_form.html.twig') }}
 
-        <a href="{{ path('post_index') }}">back to list</a>
+        <a href="{{ path('post_index') }}">Revenir à la liste de figures</a>
 {% endblock %}
