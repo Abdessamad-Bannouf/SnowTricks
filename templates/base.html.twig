@@ -45,14 +45,14 @@
                 </div>
                 <div class="menu">
                     <ul>
-                        <li><a href="{{ path('home') }}">Home</a></li>
-                        <li><a href="{{ path('post_index') }}">Tricks</a></li>
+                        <li><a href="{{ path('home') }}">Accueil</a></li>
+                        <li><a href="{{ path('post_index') }}">Figures</a></li>
                         {% if app.user %}
                             <li>{{ app.user.username }}</li>
-                            <li><a href="{{ path('app_logout') }}">Log out</a></li>
+                            <li><a href="{{ path('app_logout') }}">Se déconnecter</a></li>
                         
                             {% else %}
-                            <li><a href="{{ path('app_login') }}">Login</a></li>
+                            <li><a href="{{ path('app_login') }}">Se connecter</a></li>
                         {% endif %}
                     </ul>
                 </div>
