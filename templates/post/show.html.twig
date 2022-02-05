@@ -117,12 +117,15 @@
     </div>
 
     {# Formulaire pour le commentaire #}
-    {{ form_start(form, {'action': path('comment_new'), 'attr': {'id': 'comment-form'}}) }}
-    <div class="form-comment-content">
-        {{ form_widget(form.content) }}
-    </div>
-    {{ form_widget(form.postId, {'value' : post.id} ) }}
-    {{ form_end(form) }}
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        {{ form_start(form, {'action': path('comment_new'), 'attr': {'id': 'comment-form'}}) }}
+        <div class="form-comment-content">
+            {{ form_widget(form.content) }}
+        </div>
+        {{ form_widget(form.postId, {'value' : post.id} ) }}
+        {{ form_end(form) }}
+    {% endif %}
+
 
     {# Affichage des commentaires #}
     <div class="comments-all">
@@ -138,7 +141,7 @@
                                 </div>
                                 <div class="float-left meta">
                                     <div class="title h5">
-                                        <b>{{ app.user.username }}</b>
+                                        <b>{{ post.user.username }}</b>
                                         a publié un commentaire.
                                     </div>
                                     <h6 class="text-muted time">{{ post.date ? post.date|date('Y-m-d H:i:s') : '' }}</h6>
@@ -148,7 +151,7 @@
                                 <p>{{ comment.content }}</p>
                                 {% if is_granted('ROLE_ADMIN') %}
                                     <a href="{{ path('comment_show', {'id': comment.id}) }}">Voir</a>
-                                    <a href="{{ path('comment_edit', {'id': comment.id}) }}">Editer</a>
+                                    <a href="{{ path('comment_edit', {'id': comment.id}) }}">Modifier</a>
                                 {% endif %}
                             </div>
                         </div>
