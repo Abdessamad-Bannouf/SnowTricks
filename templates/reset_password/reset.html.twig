@@ -20,14 +20,14 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 {% endblock %}
 
-{% block title %}Password - nouveau{% endblock %}
+{% block title %}Mot de passe oublié - nouveau{% endblock %}
 
 {% block body %}
     <div class="container">
         <div class="d-flex justify-content-center h-100">
             <div class="card">
                 <div class="card-header">
-                    <h3>Tapez votre nouveau password</h3>
+                    <h3>Tapez votre nouveau mot de passe</h3>
                     <div class="d-flex justify-content-end social_icon">
                         <span><i class="fab fa-facebook-square"></i></span>
                         <span><i class="fab fa-google-plus-square"></i></span>
@@ -37,7 +37,7 @@
                 <div class="card-body">
                     {{ form_start(resetForm) }}
                         {{ form_row(resetForm.plainPassword) }}
-                        <button class="btn btn-primary">Changer de password</button>
+                        <button class="btn btn-primary">Changer de mot de passe</button>
                     {{ form_end(resetForm) }}
                 </div>
             </div>
