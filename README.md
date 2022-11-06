@@ -120,3 +120,13 @@ Si l’utilisateur est authentifié, il peut voir un formulaire au dessus de la 
     ● Lancer la commande : php bin/console doctrine:fixtures:load  
 
     ● Aller sur l'url : https://localhost:8000/home
+
+
+
+# Authentification :  
+
+    ● Pour se connecter en tant qu'utilisateur: 
+        email => user@test.com, mot de passe => user
+    
+    ● Pour se connecter en tant qu'administrateur: 
+        email => admin@test.com, mot de passe => admin

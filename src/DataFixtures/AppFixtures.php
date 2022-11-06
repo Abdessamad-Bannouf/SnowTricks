@@ -55,6 +55,34 @@ class AppFixtures extends Fixture
             array_push($users, $user);
 
             $manager->persist($user);
+
+            if($i === 9) {
+                $user = new User;
+
+                $getHumanType = $faker->randomElement($humanType);
+
+                $user->setUsername($faker->userName)
+                    ->setEmail('user@test.com')
+                    ->setPassword($this->encoder->encodePassword($user, 'user'))
+                    ->setPhoto('https://randomuser.me/api/portraits/' . ($getHumanType == 'male' ? 'men/' : 'women/') . $faker->numberBetween(1,60) . '.jpg')
+                    ->setRoles('ROLE_USER');
+
+                array_push($users, $user);
+
+                $manager->persist($user);
+
+                $user = new User;
+
+                $user->setUsername($faker->userName)
+                    ->setEmail('admin@test.com')
+                    ->setPassword($this->encoder->encodePassword($user, 'admin'))
+                    ->setPhoto('https://randomuser.me/api/portraits/' . ($getHumanType == 'male' ? 'men/' : 'women/') . $faker->numberBetween(1,60) . '.jpg')
+                    ->setRoles('ROLE_ADMIN');
+
+                array_push($users, $user);
+
+                $manager->persist($user);
+            }
         }
 
         //Créer 3 groupes de sky
